@@ -49,7 +49,6 @@ public class ProductController {
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
             map.put("message", e.getMessage());
-            System.out.println(e.getMessage());
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_MODIFIED);
         }
     }

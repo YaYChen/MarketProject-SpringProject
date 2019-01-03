@@ -21,7 +21,7 @@ public class CategoryController {
 
     @GetMapping(value = "/getCategories")
     @ResponseBody
-    public ResponseEntity<List<Category>> products(){
+    public ResponseEntity<List<Category>> getCategories(){
         return ResponseEntity.ok(mapper.getAll());
     }
 
