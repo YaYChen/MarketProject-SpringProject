@@ -41,9 +41,6 @@ public class ProductController {
     public ResponseEntity<Map<String,Object>> update(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            if(product.getProductPicture().indexOf("/imgs/")==-1){
-                product.setProductPicture("/imgs/"+product.getProductPicture());
-            }
             productMapper.update(product);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -57,7 +54,6 @@ public class ProductController {
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            product.setProductPicture("/imgs/"+product.getProductPicture());
             productMapper.insert(product);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
