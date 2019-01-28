@@ -2,8 +2,6 @@ package com.springboot.project.controller;
 
 import com.springboot.project.entity.Product;
 import com.springboot.project.mapper.ProductMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +15,6 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class ProductController {
 
-    private final Logger logger = LoggerFactory.getLogger(ProductController.class);
-
     private ProductMapper productMapper;
 
     @Autowired
@@ -28,27 +24,22 @@ public class ProductController {
 
     @GetMapping(value = "/products-ByCategory")
     public ResponseEntity<List<Product>> products(@RequestParam("category") int category){
-        logger.info("Search product by category...");
         return ResponseEntity.ok(productMapper.getProductsByCategory(category));
     }
 
     @GetMapping(value = "/product-ByCode")
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
-        logger.info("Search product by code...");
         return ResponseEntity.ok(productMapper.getOne(code));
     }
 
     @PostMapping(value = "/update-product")
     public ResponseEntity<Map<String,Object>> update(@RequestBody Product product){
-        logger.info("Update product(id: "+ product.getId() +")...");
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             productMapper.update(product);
-            logger.info("Update product(id: "+ product.getId() +") success!");
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
-            logger.error("Update product(id: "+ product.getId() +") cause abnormal: " + e.getMessage());
             map.put("message", e.getMessage());
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_MODIFIED);
         }
@@ -56,31 +47,25 @@ public class ProductController {
 
     @PostMapping(value = "/insert-product")
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Product product){
-        logger.info("Insert product...");
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             productMapper.insert(product);
-            logger.info("Insert product success!");
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
             map.put("message", e.getMessage());
-            logger.error("Insert product cause abnormal: " + e.getMessage());
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_MODIFIED);
         }
     }
 
     @DeleteMapping(value = "/delete-product")
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") long id){
-        logger.info("Delete product(id: "+ id +")...");
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             productMapper.delete(id);
-            logger.info("Delete product(id: "+ id +") success!");
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
-            logger.error("Delete product(id: "+ id +") cause abnormal: " + e.getMessage());
             map.put("message", e.getMessage());
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_MODIFIED);
         }
