@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-alpine
-VOLUME ["/tmp","/springapp/imgs/","/springapp/logs"]
+VOLUME /tmp
 ADD project-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 ENV HOST 0.0.0.0
