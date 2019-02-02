@@ -49,11 +49,11 @@ public class LogAspect {
         LOGGER.info("类名：" + clazzName);
         String methodName = joinPoint.getSignature().getName();
         LOGGER.info("方法名：" + methodName);
-        String[] paramNames = getFieldsName(this.getClass(), clazzName, methodName);
-        Object[] args = joinPoint.getArgs();
-        for(int k=0; k<args.length; k++){
-            LOGGER.info("参数名：" + paramNames[k] + "，参数值：" + JSON.toJSONString(args[k]));
-        }
+//        String[] paramNames = getFieldsName(this.getClass(), clazzName, methodName);
+//        Object[] args = joinPoint.getArgs();
+//        for(int k=0; k<args.length; k++){
+//            LOGGER.info("参数名：" + paramNames[k] + "，参数值：" + JSON.toJSONString(args[k]));
+//        }
     }
 
     /**
@@ -102,7 +102,6 @@ public class LogAspect {
         ClassPool pool = ClassPool.getDefault();
         ClassClassPath classPath = new ClassClassPath(cls);
         pool.insertClassPath(classPath);
-
         CtClass cc = pool.get(clazzName);
         CtMethod cm = cc.getDeclaredMethod(methodName);
         MethodInfo methodInfo = cm.getMethodInfo();
