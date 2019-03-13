@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 public class Product {
 
     @NotNull
-    private long id;
+    private int id;
     @NotNull
     private String code;
     @NotNull
@@ -21,11 +21,11 @@ public class Product {
     @NotNull
     private String price;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

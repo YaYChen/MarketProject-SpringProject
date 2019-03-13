@@ -4,21 +4,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class User {
-    private Integer id;
-
+    @NotNull
+    private int id;
     @NotNull
     @Size(min=8,max=16)
     private String username;
-
     @NotNull
     @Size(min=8,max=16)
     private String password;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

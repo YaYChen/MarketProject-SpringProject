@@ -8,6 +8,20 @@ import java.util.List;
 
 public interface ProductMapper {
 
+    @Select("select * from product_table where id = #{product_id}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "code",column = "code"),
+            @Result(property = "name",column = "name"),
+            @Result(property = "category",column= "category_id",
+                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategory",fetchType = FetchType.EAGER)),
+            @Result(property = "specification",column = "specification"),
+            @Result(property = "productPicture",column = "productPicture"),
+            @Result(property = "purchasePrice",column = "purchasePrice"),
+            @Result(property = "price",column = "price")
+    })
+    Product getProductByID(int product_id);
+
     @Select("select * from product_table where code = #{code}")
     @Results({
             @Result(property = "id",column = "id"),
@@ -20,7 +34,7 @@ public interface ProductMapper {
             @Result(property = "purchasePrice",column = "purchasePrice"),
             @Result(property = "price",column = "price")
     })
-    Product getOne(String code);
+    Product getProductByCode(String code);
 
     @Select("select * from product_table where category_id = #{category_id}")
     @Results({
@@ -58,6 +72,6 @@ public interface ProductMapper {
     void update(Product product);
 
     @Delete("delete form product_table where id =#{id}")
-    void delete(long id);
+    void delete(int id);
 
 }

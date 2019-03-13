@@ -29,7 +29,7 @@ public class ProductController {
 
     @GetMapping(value = "/product-ByCode")
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
-        return ResponseEntity.ok(productMapper.getOne(code));
+        return ResponseEntity.ok(productMapper.getProductByCode(code));
     }
 
     @PostMapping(value = "/update-product")
@@ -59,7 +59,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/delete-product")
-    public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") long id){
+    public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             productMapper.delete(id);
