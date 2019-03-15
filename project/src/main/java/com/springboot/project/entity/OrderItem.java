@@ -8,9 +8,11 @@ public class OrderItem {
     @NotNull
     private long orderID;
     @NotNull
-    private int productID;
+    private Product product;
     @NotNull
     private int quantity;
+    @NotNull
+    private int totalPrice;
 
     public long getId() {
         return id;
@@ -28,12 +30,12 @@ public class OrderItem {
         this.orderID = order_id;
     }
 
-    public int getProductID() {
-        return productID;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductID(int productID) {
-        this.productID = productID;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -44,4 +46,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }

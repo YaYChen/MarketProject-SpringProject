@@ -12,7 +12,7 @@ public class Order {
     @NotNull
     private Date createTime;
     @NotNull
-    private int createUserID;
+    private User createUser;
     @NotNull
     private String status;
     @NotNull
@@ -46,12 +46,12 @@ public class Order {
         this.createTime = createTime;
     }
 
-    public int getCreateUserID() {
-        return createUserID;
+    public User getCreateUser() {
+        return createUser;
     }
 
-    public void setCreateUserID(int createUserID) {
-        this.createUserID = createUserID;
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
     }
 
     public String getStatus() {

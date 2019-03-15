@@ -12,21 +12,25 @@ public interface OrderItemMapper {
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "orderID",column = "order_id"),
-            @Result(property = "productID",column = "product_id"),
-            @Result(property = "quantity",column = "number")
+            @Result(property = "product",column = "product_id",
+                    one=@One(select = "com.springboot.project.mapper.ProductMapper.getProductByID",fetchType = FetchType.EAGER)),
+            @Result(property = "quantity",column = "number"),
+            @Result(property = "totalPrice",column = "total_price")
     })
     List<OrderItem> getOrderItems(int order_id);
 
-    @Insert("insert into order_detail_table(order_id,product_id,number) " +
+    @Insert("insert into order_detail_table(order_id,product_id,number,total_price) " +
             " values(#{orderID}," +
-            " #{productID}," +
-            " #{quantity})")
+            " #{product.id}," +
+            " #{quantity}," +
+            " #{totalPrice})")
     void insert(OrderItem orderItem);
 
     @Update("update order_detail_table set " +
             "order_id=#{orderID}," +
-            "product_id=#{productID}," +
+            "product_id=#{product.id}," +
             "number=#{quantity}" +
+            "total_Price=#{totalPrice}" +
             " where id =#{id}")
     void update(OrderItem orderItem);
 
