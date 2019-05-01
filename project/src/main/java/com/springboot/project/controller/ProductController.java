@@ -1,7 +1,7 @@
 package com.springboot.project.controller;
 
 import com.springboot.project.entity.Product;
-import com.springboot.project.mapper.ProductMapper;
+import com.springboot.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,28 +15,31 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class ProductController {
 
-    private ProductMapper productMapper;
+    private ProductService productService;
 
     @Autowired
-    public ProductController(ProductMapper mapper){
-        this.productMapper=mapper;
+    public ProductController(ProductService productService){
+        this.productService = productService;
     }
 
     @GetMapping(value = "/products-ByCategory")
+    @ResponseBody
     public ResponseEntity<List<Product>> products(@RequestParam("category") int category){
-        return ResponseEntity.ok(productMapper.getProductsByCategory(category));
+        return ResponseEntity.ok(productService.getProductByCategory(category));
     }
 
     @GetMapping(value = "/product-ByCode")
+    @ResponseBody
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
-        return ResponseEntity.ok(productMapper.getProductByCode(code));
+        return ResponseEntity.ok(productService.getProductByCode(code));
     }
 
     @PostMapping(value = "/update-product")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> update(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            productMapper.update(product);
+            productService.updateProduct(product);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -46,10 +49,11 @@ public class ProductController {
     }
 
     @PostMapping(value = "/insert-product")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            productMapper.insert(product);
+            productService.insertProduct(product);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -59,10 +63,11 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/delete-product")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            productMapper.delete(id);
+            productService.deleteProduct(id);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){

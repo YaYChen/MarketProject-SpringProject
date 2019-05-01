@@ -42,7 +42,7 @@ public interface SupplierMapper {
             " where id =#{id}")
     void update(Supplier supplier);
 
-    @Delete("delete form supplier_table where id =#{id}")
+    @Delete("delete from supplier_table where id =#{id}")
     void delete(int id);
 
 }

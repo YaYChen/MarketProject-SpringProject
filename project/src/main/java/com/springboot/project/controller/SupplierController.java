@@ -1,8 +1,7 @@
 package com.springboot.project.controller;
 
 import com.springboot.project.entity.Supplier;
-import com.springboot.project.mapper.SupplierMapper;
-import org.apache.ibatis.annotations.Delete;
+import com.springboot.project.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +15,31 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class SupplierController {
 
-    private SupplierMapper supplierMapper;
+    private SupplierService supplierService;
 
     @Autowired
-    public SupplierController(SupplierMapper mapper){
-        this.supplierMapper = mapper;
+    public SupplierController(SupplierService supplierService){
+        this.supplierService = supplierService;
     }
 
     @GetMapping(value = "/getAllSupplier")
+    @ResponseBody
     public ResponseEntity<List<Supplier>> getAllSupplier(){
-        return ResponseEntity.ok(supplierMapper.selectAll());
+        return ResponseEntity.ok(supplierService.getAllSupplier());
     }
 
     @GetMapping(value = "/getSupplierByID")
-    public ResponseEntity<Supplier> getSupplierByID(@RequestParam("id") String id){
-        return ResponseEntity.ok(supplierMapper.getSupplierByID(Integer.getInteger(id)));
+    @ResponseBody
+    public ResponseEntity<Supplier> getSupplierByID(@RequestParam("id") int id){
+        return ResponseEntity.ok(supplierService.getSupplierByID(id));
     }
 
     @PostMapping(value = "/updateSupplier")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> update(@RequestBody Supplier supplier){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            supplierMapper.update(supplier);
+            supplierService.updateSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -47,10 +49,11 @@ public class SupplierController {
     }
 
     @PostMapping(value = "/insertSupplier")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Supplier supplier){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            supplierMapper.insert(supplier);
+            supplierService.insertSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -60,10 +63,11 @@ public class SupplierController {
     }
 
     @DeleteMapping(value = "/deleteSupplier")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            supplierMapper.delete(id);
+            supplierService.deleteSupplier(id);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){

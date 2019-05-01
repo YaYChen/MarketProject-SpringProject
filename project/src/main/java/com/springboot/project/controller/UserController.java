@@ -1,12 +1,10 @@
 package com.springboot.project.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.springboot.project.entity.User;
-import com.springboot.project.mapper.UserMapper;
+import com.springboot.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,17 +12,16 @@ import java.util.List;
 @CrossOrigin//跨域注解
 public class UserController {
 
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserMapper userMapper){
-        this.userMapper=userMapper;
+    public UserController(UserService userService){
+        this.userService = userService;
     }
 
-    @RequestMapping("/users")
-    public String users(){
-        List<User> users = userMapper.selectAll();
-        String usersJson = JSON.toJSONString(users);
-        return usersJson;
+    @GetMapping(value = "/getUsers")
+    @ResponseBody
+    public ResponseEntity<List<User>> getUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 }

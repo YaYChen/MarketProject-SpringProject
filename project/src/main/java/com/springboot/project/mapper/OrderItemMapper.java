@@ -34,6 +34,6 @@ public interface OrderItemMapper {
             " where id =#{id}")
     void update(OrderItem orderItem);
 
-    @Delete("delete form order_detail_table where id =#{id}")
+    @Delete("delete from order_detail_table where id =#{id}")
     void delete(long id);
 }

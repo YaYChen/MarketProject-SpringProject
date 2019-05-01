@@ -34,6 +34,6 @@ public interface UserMapper {
             " where id =#{id}")
     void update(User user);
 
-    @Delete("delete form user_table where id =#{id}")
+    @Delete("delete from user_table where id =#{id}")
     void delete(int id);
 }

@@ -1,9 +1,7 @@
 package com.springboot.project.controller;
 
 import com.springboot.project.entity.Order;
-import com.springboot.project.entity.OrderItem;
-import com.springboot.project.mapper.OrderItemMapper;
-import com.springboot.project.mapper.OrderMapper;
+import com.springboot.project.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,36 +13,31 @@ import java.util.*;
 @CrossOrigin//跨域注解
 public class OrderController {
 
-    private OrderMapper orderMapper;
-    private OrderItemMapper orderItemMapper;
+    private OrderService orderService;
 
     @Autowired
-    public OrderController(OrderMapper orderMapper, OrderItemMapper orderItemMapper){
-        this.orderMapper = orderMapper;
-        this.orderItemMapper = orderItemMapper;
+    public OrderController(OrderService orderService){
+        this.orderService = orderService;
     }
 
     @GetMapping(value = "/search-order-by-user")
+    @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByUser(@RequestParam(value = "user_id") int userID){
-        return ResponseEntity.ok(orderMapper.searchByUser(userID));
+        return ResponseEntity.ok(orderService.searchOrderByUser(userID));
     }
 
     @PostMapping(value = "/search-order-by-date")
+    @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByDate(@RequestBody DateParam dateParam){
-        return ResponseEntity.ok(orderMapper.searchByDate(dateParam.start,dateParam.end));
+        return ResponseEntity.ok(orderService.searchOrderByDate(dateParam.start,dateParam.end));
     }
 
     @PostMapping(value = "/create-order")
+    @ResponseBody
     public ResponseEntity<Map<String,Object>> createOrder(@RequestBody Order order){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            order.setCreateTime(new Date());
-            orderMapper.insert(order);
-            Order newOrder = orderMapper.getOne(order.getSerial());
-            for (OrderItem orderItem :order.getOrderItems()) {
-                orderItem.setOrderID(newOrder.getId());
-                orderItemMapper.insert(orderItem);
-            }
+            orderService.createOrder(order);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -54,22 +47,11 @@ public class OrderController {
     }
 
     @PostMapping(value = "/update-order")
+    @ResponseBody
     public ResponseEntity<Map<String, Object>> updateOrder(@RequestBody Order order){
         Map<String,Object> map = new HashMap<String, Object>();
         try{
-            Order oldOrder = orderMapper.getOne(order.getSerial());
-            List<Long> idList = new ArrayList<Long>();
-            for(OrderItem orderItem:oldOrder.getOrderItems()){
-               idList.add(orderItem.getId());
-            }
-            for(OrderItem item:order.getOrderItems()){
-                if(idList.contains(item.getId())){
-                    orderItemMapper.update(item);
-                }else{
-                    orderItemMapper.delete(item.getId());
-                }
-            }
-            orderMapper.update(order);
+            orderService.updateOrder(order);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -79,14 +61,11 @@ public class OrderController {
     }
 
     @PostMapping(value = "/delete-order")
+    @ResponseBody
     public ResponseEntity<Map<String,String>> deleteOrder(@RequestBody String serial){
         Map<String,String> map = new HashMap<String,String>();
         try{
-            Order order = orderMapper.getOne(serial);
-            for(OrderItem item : order.getOrderItems()){
-                orderItemMapper.delete(item.getId());
-            }
-            orderMapper.delete(order.getId());
+           orderService.deleteOrder(serial);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,String>>(map, HttpStatus.OK);
         }catch (Exception e){

@@ -26,6 +26,6 @@ public interface CategoryMapper {
             " WHERE id =#{id}")
     void update(Category category);
 
-    @Delete("delete form category_table where id =#{id}")
+    @Delete("delete from category_table where id =#{id}")
     void delete(int id);
 }

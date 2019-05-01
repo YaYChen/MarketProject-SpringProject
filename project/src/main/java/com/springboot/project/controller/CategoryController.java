@@ -1,7 +1,7 @@
 package com.springboot.project.controller;
 
 import com.springboot.project.entity.Category;
-import com.springboot.project.mapper.CategoryMapper;
+import com.springboot.project.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +15,15 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class CategoryController {
 
-    private CategoryMapper mapper;
+    private CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryMapper mapper){this.mapper=mapper;}
+    public CategoryController(CategoryService categoryService){this.categoryService = categoryService;}
 
     @GetMapping(value = "/getCategories")
     @ResponseBody
     public ResponseEntity<List<Category>> getCategories(){
-        return ResponseEntity.ok(mapper.getAll());
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @PostMapping(value = "/update-category")
@@ -31,7 +31,7 @@ public class CategoryController {
     public ResponseEntity<Map<String,Object>> update(@RequestBody Category category){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            mapper.update(category);
+            categoryService.updateCategory(category);
             map.put("message", "");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -45,7 +45,7 @@ public class CategoryController {
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Category category){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            mapper.insert(category);
+            categoryService.insertCategory(category);
             map.put("message", "");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -59,7 +59,7 @@ public class CategoryController {
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            mapper.delete(id);
+            categoryService.deleteCategory(id);
             map.put("message", "");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){

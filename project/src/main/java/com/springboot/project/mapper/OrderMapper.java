@@ -73,6 +73,6 @@ public interface OrderMapper {
             " where id =#{id}")
     void update(Order order);
 
-    @Delete("delete form order_table where id =#{id}")
+    @Delete("delete from order_table where id =#{id}")
     void delete(long id);
 }

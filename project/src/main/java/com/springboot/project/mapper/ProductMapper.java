@@ -71,7 +71,7 @@ public interface ProductMapper {
                     " where id =#{id}")
     void update(Product product);
 
-    @Delete("delete form product_table where id =#{id}")
+    @Delete("delete from product_table where id =#{id}")
     void delete(int id);
 
 }
