@@ -1,6 +1,7 @@
 package com.springboot.project.controller;
 
 import com.springboot.project.entity.Product;
+import com.springboot.project.entity.SalesVolume;
 import com.springboot.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,5 +75,11 @@ public class ProductController {
             map.put("message", e.getMessage());
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_MODIFIED);
         }
+    }
+
+    @GetMapping(value = "/getWholeSalesVolume")
+    @ResponseBody
+    public ResponseEntity<List<SalesVolume>> getWholeSalesVolume(){
+        return ResponseEntity.ok(productService.getWholeSalesVolume());
     }
 }

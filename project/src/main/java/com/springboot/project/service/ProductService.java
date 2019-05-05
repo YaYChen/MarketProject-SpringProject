@@ -1,7 +1,9 @@
 package com.springboot.project.service;
 
 import com.springboot.project.entity.Product;
+import com.springboot.project.entity.SalesVolume;
 import com.springboot.project.mapper.ProductMapper;
+import com.springboot.project.mapper.SalesVolumeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -10,8 +12,13 @@ public class ProductService {
 
     private ProductMapper productMapper;
 
+    private SalesVolumeMapper salesVolumeMapper;
+
     @Autowired
-    public ProductService(ProductMapper productMapper){this.productMapper = productMapper;}
+    public ProductService(ProductMapper productMapper,SalesVolumeMapper salesVolumeMapper){
+        this.productMapper = productMapper;
+        this.salesVolumeMapper = salesVolumeMapper;
+    }
 
     public Product getProductByCode(String code){
         return productMapper.getProductByCode(code);
@@ -31,5 +38,9 @@ public class ProductService {
 
     public void deleteProduct(int id) throws Exception{
         productMapper.delete(id);
+    }
+
+    public List<SalesVolume> getWholeSalesVolume(){
+        return salesVolumeMapper.getWholeSalesVolume();
     }
 }
