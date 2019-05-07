@@ -4,12 +4,18 @@ import com.springboot.project.entity.Order;
 import com.springboot.project.entity.OrderItem;
 import com.springboot.project.mapper.OrderItemMapper;
 import com.springboot.project.mapper.OrderMapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service
+@MapperScan("com.springboot.project.mapper")
+@Transactional
 public class OrderService {
 
     private OrderMapper orderMapper;
@@ -19,6 +25,14 @@ public class OrderService {
     public OrderService(OrderMapper orderMapper,OrderItemMapper orderItemMapper){
         this.orderMapper = orderMapper;
         this.orderItemMapper = orderItemMapper;
+    }
+
+    public Order getOrderBySerial(String serial){
+        return orderMapper.getOne(serial);
+    }
+
+    public List<Order> getAllOrder(){
+        return orderMapper.getAllOrder();
     }
 
     public List<Order> searchOrderByUser(int userID){

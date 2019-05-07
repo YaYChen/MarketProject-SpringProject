@@ -9,6 +9,21 @@ import java.util.Date;
 
 public interface OrderMapper {
 
+    @Select("Select * from order_table order by create_time desc")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "serial",column = "serial"),
+            @Result(property = "createTime",column = "create_time"),
+            @Result(property = "createUser",column= "user_id",
+                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
+            @Result(property = "status",column = "status"),
+            @Result(property = "totalPrice",column = "total_price"),
+            @Result(property = "totalNumber",column = "total_number"),
+            @Result(property = "orderItems",column = "id",
+                    many = @Many(select = "com.springboot.project.mapper.OrderItemMapper.getOrderItems",fetchType = FetchType.EAGER))
+    })
+    List<Order> getAllOrder();
+
     @Select("select * from order_table where serial = #{serial}")
     @Results({
             @Result(property = "id",column = "id"),

@@ -4,10 +4,16 @@ import com.springboot.project.entity.Product;
 import com.springboot.project.entity.SalesVolume;
 import com.springboot.project.mapper.ProductMapper;
 import com.springboot.project.mapper.SalesVolumeMapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@MapperScan("com.springboot.project.mapper")
+@Transactional
 public class ProductService {
 
     private ProductMapper productMapper;

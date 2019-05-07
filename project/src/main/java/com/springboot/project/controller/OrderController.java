@@ -20,6 +20,19 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+
+    @GetMapping(value = "/get-order-by-serial")
+    @ResponseBody
+    public ResponseEntity<Order> getOrderBySerial(@RequestParam(value = "serial") String serial){
+        return ResponseEntity.ok(orderService.getOrderBySerial(serial));
+    }
+
+    @GetMapping(value = "/get-all-order")
+    @ResponseBody
+    public ResponseEntity<List<Order>> getAllOrder(){
+        return ResponseEntity.ok(orderService.getAllOrder());
+    }
+
     @GetMapping(value = "/search-order-by-user")
     @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByUser(@RequestParam(value = "user_id") int userID){
