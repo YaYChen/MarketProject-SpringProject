@@ -32,7 +32,8 @@ public interface SupplierMapper {
             " #{brand}," +
             " #{phone}," +
             " #{picture})" )
-    void insert(Supplier supplier);
+    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
+    int insert(Supplier supplier);
 
     @Update("update supplier_table set " +
             "name=#{name}," +

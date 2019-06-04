@@ -24,6 +24,21 @@ public interface OrderMapper {
     })
     List<Order> getAllOrder();
 
+    @Select("select * from order_table where id = #{id}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "serial",column = "serial"),
+            @Result(property = "createTime",column = "create_time"),
+            @Result(property = "createUser",column= "user_id",
+                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
+            @Result(property = "status",column = "status"),
+            @Result(property = "totalPrice",column = "total_price"),
+            @Result(property = "totalNumber",column = "total_number"),
+            @Result(property = "orderItems",column = "id",
+                    many = @Many(select = "com.springboot.project.mapper.OrderItemMapper.getOrderItems",fetchType = FetchType.EAGER))
+    })
+    Order getOrderById(int id);
+
     @Select("select * from order_table where serial = #{serial}")
     @Results({
             @Result(property = "id",column = "id"),
@@ -76,7 +91,8 @@ public interface OrderMapper {
             " #{status}," +
             " #{totalPrice}," +
             " #{totalNumber})")
-    void insert(Order order);
+    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
+    int insert(Order order);
 
     @Update("update order_table set " +
             "serial=#{serial}," +

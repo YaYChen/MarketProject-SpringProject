@@ -1,8 +1,9 @@
 package com.springboot.project.entity;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class Supplier {
+public class Supplier implements Serializable {
     @NotNull
     private int id;
     @NotNull

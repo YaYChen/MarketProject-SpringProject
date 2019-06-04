@@ -2,8 +2,9 @@ package com.springboot.project.entity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
     @NotNull
     private int id;
     @NotNull

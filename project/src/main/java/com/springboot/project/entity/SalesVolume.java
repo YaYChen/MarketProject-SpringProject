@@ -1,6 +1,11 @@
 package com.springboot.project.entity;
 
-public class SalesVolume {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
+
+@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
+public class SalesVolume implements Serializable {
 
     private Product product;
     private int nums;

@@ -1,8 +1,9 @@
 package com.springboot.project.entity;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class OrderItem {
+public class OrderItem implements Serializable {
     @NotNull
     private long id = 0;
     @NotNull

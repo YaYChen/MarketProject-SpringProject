@@ -58,7 +58,8 @@ public interface ProductMapper {
             " #{productPicture}," +
             " #{purchasePrice}," +
             " #{price})")
-    void insert(Product product);
+    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
+    int insert(Product product);
 
     @Update("update product_table set " +
                     "code=#{code}," +

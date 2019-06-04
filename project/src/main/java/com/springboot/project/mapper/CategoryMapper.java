@@ -10,16 +10,21 @@ public interface CategoryMapper {
     @Select("select * from category_table")
     @Results({
             @Result(property = "id",column = "id"),
-            @Result(property = "name",  column = "name"),
+            @Result(property = "name",  column = "name")
     })
     List<Category> getAll();
 
     @Select("select * from category_table where id = #{id} ")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "name",  column = "name")
+    })
     Category getCategory(int id);
 
     @Insert("insert into category_table(name)" +
             " values(#{name})")
-    void insert(Category category);
+    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
+    int insert(Category category);
 
     @Update("update category_table set " +
             "name=#{name}," +

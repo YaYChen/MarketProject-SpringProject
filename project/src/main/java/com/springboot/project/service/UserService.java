@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@MapperScan("com.springboot.project.mapper")
 @Transactional
 public class UserService {
 
