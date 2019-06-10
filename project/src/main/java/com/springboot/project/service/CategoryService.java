@@ -24,13 +24,13 @@ public class CategoryService {
     }
 
     @Cacheable(value = "categoryCache",key = "#id")
-    public Category getOneCategory(int id){
-        return categoryMapper.getCategory(id);
+    public Category getOneCategory(int id,int userId){
+        return categoryMapper.getCategory(id,userId);
     }
 
-    @Cacheable(value = "categoryCache",key = "allCategory")
-    public List<Category> getAllCategories(){
-        return categoryMapper.getAll();
+    @Cacheable(value = "categoryCache",key = "#root.methodName")
+    public List<Category> getAllCategories(int userId){
+        return categoryMapper.getAll(userId);
     }
 
     @CachePut(value = "categoryCache",key = "#result.id")
@@ -40,7 +40,7 @@ public class CategoryService {
     }
 
     public Category insertCategory(Category category) throws Exception{
-        return this.getOneCategory(categoryMapper.insert(category));
+        return this.getOneCategory(categoryMapper.insert(category),category.getUserId());
     }
 
     @CacheEvict(value = "categoryCache",key = "#id")

@@ -21,7 +21,7 @@ public class SupplierService {
     @Autowired
     public SupplierService(SupplierMapper supplierMapper){this.supplierMapper = supplierMapper;}
 
-    @Cacheable(value = "supplierCache",key = "allSupplier")
+    @Cacheable(value = "supplierCache",key = "#root.methodName")
     public List<Supplier> getAllSupplier(){
         return supplierMapper.selectAll();
     }

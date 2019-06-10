@@ -9,6 +9,16 @@ public class Category implements Serializable {
     private int id;
     @NotNull
     private String name;
+    @NotNull
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public int getId() {
         return id;

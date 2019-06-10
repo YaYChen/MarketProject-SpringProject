@@ -2,7 +2,6 @@ package com.springboot.project.service;
 
 import com.springboot.project.entity.User;
 import com.springboot.project.mapper.UserMapper;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,5 +23,9 @@ public class UserService {
             user.setPassword("*********");
         }
         return  list;
+    }
+
+    public User getUserForIdentify(String name){
+        return userMapper.getUserByName(name);
     }
 }

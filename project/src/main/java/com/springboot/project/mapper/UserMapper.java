@@ -23,6 +23,14 @@ public interface UserMapper {
     })
     User getUserByID(int user_id);
 
+    @Select("select * from user_table where name = #{name}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "username", column = "name"),
+            @Result(property = "password", column = "password")
+    })
+    User getUserByName(String name);
+
     @Insert("insert into user_table(name,password) " +
             " values(#{username}," +
             " #{password})" )

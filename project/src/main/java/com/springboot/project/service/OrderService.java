@@ -39,7 +39,7 @@ public class OrderService {
         return orderMapper.getOrderById(id);
     }
 
-    @Cacheable(value = "orderCache",key = "allOrder")
+    @Cacheable(value = "orderCache",key = "#root.methodName")
     public List<Order> getAllOrder(){
         return orderMapper.getAllOrder();
     }

@@ -7,22 +7,24 @@ import java.util.List;
 
 public interface CategoryMapper {
 
-    @Select("select * from category_table")
+    @Select("select * from category_table where userId = #{userId}")
     @Results({
             @Result(property = "id",column = "id"),
-            @Result(property = "name",  column = "name")
+            @Result(property = "name",  column = "name"),
+            @Result(property = "userId",column = "userId")
     })
-    List<Category> getAll();
+    List<Category> getAll(int userId);
 
-    @Select("select * from category_table where id = #{id} ")
+    @Select("select * from category_table where id = #{id} and userId = #{userId}")
     @Results({
             @Result(property = "id",column = "id"),
-            @Result(property = "name",  column = "name")
+            @Result(property = "name",  column = "name"),
+            @Result(property = "userId",column = "userId")
     })
-    Category getCategory(int id);
+    Category getCategory(int id,int userId);
 
-    @Insert("insert into category_table(name)" +
-            " values(#{name})")
+    @Insert("insert into category_table(name,userId)" +
+            " values(#{name,userId})")
     @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
     int insert(Category category);
 

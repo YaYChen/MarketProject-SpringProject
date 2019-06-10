@@ -1,5 +1,6 @@
 package com.springboot.project.controller;
 
+import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Category;
 import com.springboot.project.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +17,25 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class CategoryController {
 
-    private CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService){this.categoryService = categoryService;}
+    private HttpServletRequest request;
+
+    private CategoryService categoryService;
+
+    private JwtHelper jwtHelper;
+
+    @Autowired
+    public CategoryController(CategoryService categoryService,JwtHelper jwtHelper){
+        this.categoryService = categoryService;
+        this.jwtHelper = jwtHelper;
+    }
 
     @GetMapping(value = "/getCategories")
     @ResponseBody
     public ResponseEntity<List<Category>> getCategories(){
-        return ResponseEntity.ok(categoryService.getAllCategories());
+        Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
+        return ResponseEntity.ok(categoryService.getAllCategories(Integer.getInteger(claim.get("userId").toString())));
     }
 
     @PostMapping(value = "/update-category")
