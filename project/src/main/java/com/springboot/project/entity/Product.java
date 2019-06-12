@@ -21,6 +21,8 @@ public class Product implements Serializable {
     private String purchasePrice;
     @NotNull
     private String price;
+    @NotNull
+    private User createUser;
 
     public int getId() {
         return id;
@@ -84,6 +86,14 @@ public class Product implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public User getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
     }
 
 }

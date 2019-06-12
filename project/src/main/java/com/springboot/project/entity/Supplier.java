@@ -14,6 +14,8 @@ public class Supplier implements Serializable {
     private String phone;
     @NotNull
     private String picture;
+    @NotNull
+    private User createUser;
 
     public int getId() {
         return id;
@@ -53,5 +55,13 @@ public class Supplier implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public User getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
     }
 }

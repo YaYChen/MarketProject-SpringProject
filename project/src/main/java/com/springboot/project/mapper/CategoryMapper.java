@@ -2,34 +2,38 @@ package com.springboot.project.mapper;
 
 import com.springboot.project.entity.Category;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
 
 public interface CategoryMapper {
 
-    @Select("select * from category_table where userId = #{userId}")
+    @Select("select * from category_table where user_id = #{userId}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "name",  column = "name"),
-            @Result(property = "userId",column = "userId")
+            @Result(property = "createUser",column = "user_id",
+                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
     })
     List<Category> getAll(int userId);
 
-    @Select("select * from category_table where id = #{id} and userId = #{userId}")
+    @Select("select * from category_table where id = #{id} and user_id = #{userId}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "name",  column = "name"),
-            @Result(property = "userId",column = "userId")
+            @Result(property = "userId",column = "user_id",
+                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
     })
     Category getCategory(int id,int userId);
 
-    @Insert("insert into category_table(name,userId)" +
-            " values(#{name,userId})")
+    @Insert("insert into category_table(name,user_id)" +
+            " values(#{name,createUser.id})")
     @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
     int insert(Category category);
 
     @Update("update category_table set " +
             "name=#{name}," +
+            "user_id=#{createUser.id}," +
             " WHERE id =#{id}")
     void update(Category category);
 

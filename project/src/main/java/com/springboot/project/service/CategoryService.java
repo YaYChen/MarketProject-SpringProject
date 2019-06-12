@@ -2,7 +2,6 @@ package com.springboot.project.service;
 
 import com.springboot.project.entity.Category;
 import com.springboot.project.mapper.CategoryMapper;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -40,7 +39,7 @@ public class CategoryService {
     }
 
     public Category insertCategory(Category category) throws Exception{
-        return this.getOneCategory(categoryMapper.insert(category),category.getUserId());
+        return this.getOneCategory(categoryMapper.insert(category),category.getUser().getId());
     }
 
     @CacheEvict(value = "categoryCache",key = "#id")

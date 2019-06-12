@@ -4,7 +4,6 @@ import com.springboot.project.entity.Order;
 import com.springboot.project.entity.OrderItem;
 import com.springboot.project.mapper.OrderItemMapper;
 import com.springboot.project.mapper.OrderMapper;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -40,8 +39,8 @@ public class OrderService {
     }
 
     @Cacheable(value = "orderCache",key = "#root.methodName")
-    public List<Order> getAllOrder(){
-        return orderMapper.getAllOrder();
+    public List<Order> getAllOrder(int userId){
+        return orderMapper.getAllOrder(userId);
     }
 
     @Cacheable(value = "orderCache",key = "#userID")

@@ -32,12 +32,27 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String,Object>> login(String loginName,String password) throws Exception {
+    @PostMapping("/sign-up")
+    @ResponseBody
+    public ResponseEntity<Map<String,Object>> signUp(@RequestBody User newUser) throws Exception{
+        Map<String,Object> map = new HashMap<String,Object>();
+        try{
+            this.userService.registeUser(newUser);
+            map.put("message", "Success!");
+            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+        }catch (Exception e){
+            map.put("message", e.getMessage());
+            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+    @PostMapping("/sign-in")
+    @ResponseBody
+    public ResponseEntity<Map<String,Object>> signIn(@RequestBody User loginUser) throws Exception {
         Map<String,Object> map = new HashMap<String,Object>();
         Map<String, Object> claims = new HashMap<String, Object>();
-        User user = userService.getUserForIdentify(loginName);
-        if (user.getPassword().equals(password)) {
+        User user = userService.getUserForIdentify(loginUser.getUsername());
+        if (user.getPassword().equals(loginUser.getPassword())) {
             claims.put("userId", user.getId());
             map.put("token", jwtHelper.generateToken(claims));
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

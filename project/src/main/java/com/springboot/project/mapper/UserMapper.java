@@ -34,7 +34,8 @@ public interface UserMapper {
     @Insert("insert into user_table(name,password) " +
             " values(#{username}," +
             " #{password})" )
-    void insert(User user);
+    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
+    int insert(User user);
 
     @Update("update user_table set " +
             "name=#{username}," +

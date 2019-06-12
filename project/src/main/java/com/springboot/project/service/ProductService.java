@@ -4,7 +4,6 @@ import com.springboot.project.entity.Product;
 import com.springboot.project.entity.SalesVolume;
 import com.springboot.project.mapper.ProductMapper;
 import com.springboot.project.mapper.SalesVolumeMapper;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -29,18 +28,18 @@ public class ProductService {
     }
 
     @Cacheable(value = "productCache",key = "#id")
-    public Product getProductById(int id){
-        return productMapper.getProductByID(id);
+    public Product getProductById(int id,int userId){
+        return productMapper.getProductByID(id,userId);
     }
 
     @Cacheable(value = "productCache",key = "#code")
-    public Product getProductByCode(String code){
-        return productMapper.getProductByCode(code);
+    public Product getProductByCode(String code,int userId){
+        return productMapper.getProductByCode(code,userId);
     }
 
     @Cacheable(value = "productCache",key = "#categoryID")
-    public List<Product> getProductByCategory(int categoryID){
-        return productMapper.getProductsByCategory(categoryID);
+    public List<Product> getProductByCategory(int categoryID,int userId){
+        return productMapper.getProductsByCategory(categoryID,userId);
     }
 
     @CachePut(value = "productCache",key = "#result.id")
@@ -51,7 +50,7 @@ public class ProductService {
 
     public Product insertProduct(Product product) throws Exception{
         int id = productMapper.insert(product);
-        return this.getProductById(id);
+        return this.getProductById(id,product.getCreateUser().getId());
     }
 
     @CacheEvict(value = "productCache",key = "#id")

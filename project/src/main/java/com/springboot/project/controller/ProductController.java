@@ -1,5 +1,6 @@
 package com.springboot.project.controller;
 
+import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Product;
 import com.springboot.project.entity.SalesVolume;
 import com.springboot.project.service.ProductService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,23 +18,34 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class ProductController {
 
+    @Autowired
+    private HttpServletRequest request;
+
     private ProductService productService;
+    private JwtHelper jwtHelper;
 
     @Autowired
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService,JwtHelper jwtHelper){
         this.productService = productService;
+        this.jwtHelper = jwtHelper;
     }
 
     @GetMapping(value = "/products-ByCategory")
     @ResponseBody
     public ResponseEntity<List<Product>> products(@RequestParam("category") int category){
-        return ResponseEntity.ok(productService.getProductByCategory(category));
+        int userId = Integer.getInteger(
+                jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId").toString());
+        return ResponseEntity.ok(productService.getProductByCategory(category,userId));
     }
 
     @GetMapping(value = "/product-ByCode")
     @ResponseBody
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
-        return ResponseEntity.ok(productService.getProductByCode(code));
+        int userId = Integer.getInteger(
+                jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId").toString());
+        return ResponseEntity.ok(productService.getProductByCode(code,userId));
     }
 
     @PostMapping(value = "/update-product")

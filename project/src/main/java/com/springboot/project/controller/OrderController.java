@@ -1,5 +1,6 @@
 package com.springboot.project.controller;
 
+import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Order;
 import com.springboot.project.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,17 +8,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
 @CrossOrigin//跨域注解
 public class OrderController {
 
+    @Autowired
+    private HttpServletRequest request;
+
     private OrderService orderService;
+    private JwtHelper jwtHelper;
 
     @Autowired
-    public OrderController(OrderService orderService){
+    public OrderController(OrderService orderService,JwtHelper jwtHelper){
         this.orderService = orderService;
+        this.jwtHelper = jwtHelper;
     }
 
 
@@ -30,7 +37,8 @@ public class OrderController {
     @GetMapping(value = "/get-all-order")
     @ResponseBody
     public ResponseEntity<List<Order>> getAllOrder(){
-        return ResponseEntity.ok(orderService.getAllOrder());
+        Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
+        return ResponseEntity.ok(orderService.getAllOrder(Integer.getInteger(claim.get("userId").toString())));
     }
 
     @GetMapping(value = "/search-order-by-user")

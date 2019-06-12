@@ -28,4 +28,8 @@ public class UserService {
     public User getUserForIdentify(String name){
         return userMapper.getUserByName(name);
     }
+
+    public  User registeUser(User newUser){
+        return this.userMapper.getUserByID(this.userMapper.insert(newUser));
+    }
 }

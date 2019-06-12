@@ -1,5 +1,6 @@
 package com.springboot.project.controller;
 
+import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Supplier;
 import com.springboot.project.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,23 +17,34 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class SupplierController {
 
+    @Autowired
+    private HttpServletRequest request;
+
     private SupplierService supplierService;
+    private JwtHelper jwtHelper;
 
     @Autowired
-    public SupplierController(SupplierService supplierService){
+    public SupplierController(SupplierService supplierService,JwtHelper jwtHelper){
         this.supplierService = supplierService;
+        this.jwtHelper = jwtHelper;
     }
 
     @GetMapping(value = "/getAllSupplier")
     @ResponseBody
     public ResponseEntity<List<Supplier>> getAllSupplier(){
-        return ResponseEntity.ok(supplierService.getAllSupplier());
+        int userId = Integer.getInteger(
+                jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId").toString());
+        return ResponseEntity.ok(supplierService.getAllSupplier(userId));
     }
 
     @GetMapping(value = "/getSupplierByID")
     @ResponseBody
     public ResponseEntity<Supplier> getSupplierByID(@RequestParam("id") int id){
-        return ResponseEntity.ok(supplierService.getSupplierByID(id));
+        int userId = Integer.getInteger(
+                jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId").toString());
+        return ResponseEntity.ok(supplierService.getSupplierByID(id,userId));
     }
 
     @PostMapping(value = "/updateSupplier")

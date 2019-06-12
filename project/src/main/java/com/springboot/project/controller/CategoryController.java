@@ -17,7 +17,6 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class CategoryController {
 
-
     @Autowired
     private HttpServletRequest request;
 

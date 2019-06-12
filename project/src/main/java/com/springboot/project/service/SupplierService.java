@@ -2,7 +2,6 @@ package com.springboot.project.service;
 
 import com.springboot.project.entity.Supplier;
 import com.springboot.project.mapper.SupplierMapper;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -22,13 +21,13 @@ public class SupplierService {
     public SupplierService(SupplierMapper supplierMapper){this.supplierMapper = supplierMapper;}
 
     @Cacheable(value = "supplierCache",key = "#root.methodName")
-    public List<Supplier> getAllSupplier(){
-        return supplierMapper.selectAll();
+    public List<Supplier> getAllSupplier(int userId){
+        return supplierMapper.selectAll(userId);
     }
 
     @Cacheable(value = "supplierCache",key = "#id")
-    public Supplier getSupplierByID(int id){
-        return supplierMapper.getSupplierByID(id);
+    public Supplier getSupplierByID(int id,int userId){
+        return supplierMapper.getSupplierByID(id,userId);
     }
 
     @CachePut(value = "supplierCache",key = "#result.id")
@@ -39,7 +38,7 @@ public class SupplierService {
 
     public Supplier insertSupplier(Supplier supplier) throws Exception{
         int id = this.supplierMapper.insert(supplier);
-        return this.getSupplierByID(id);
+        return this.getSupplierByID(id,supplier.getCreateUser().getId());
     }
 
     @CacheEvict(value = "supplierCache",key = "#id")
