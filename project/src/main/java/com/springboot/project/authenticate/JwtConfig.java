@@ -19,6 +19,9 @@ public class JwtConfig {
     @Value("${jwt.authorised-urls}")
     private String[] authorisedUrls;
 
+    @Value("${jwt.ignore-urls}")
+    public String[] IgnoreUrls;
+
     @Bean
     public JwtHelper jwtHelperBean() {
         return new JwtHelper(secret, expire);
@@ -30,8 +33,10 @@ public class JwtConfig {
         JwtFilter filter = new JwtFilter(jwtHelperBean(), authorisedUrls);
         registrationBean.setFilter(filter);
         List<String> urlPatterns = new ArrayList<String>();
-        urlPatterns.add("/*");
+        urlPatterns.add("/p/*");
         registrationBean.setUrlPatterns(urlPatterns);
         return registrationBean;
     }
+
+
 }

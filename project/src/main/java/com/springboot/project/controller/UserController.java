@@ -34,7 +34,7 @@ public class UserController {
 
     @PostMapping("/sign-up")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> signUp(@RequestBody User newUser) throws Exception{
+    public ResponseEntity<Map<String,Object>> signUp(@RequestBody User newUser) {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             this.userService.registeUser(newUser);
@@ -48,17 +48,24 @@ public class UserController {
 
     @PostMapping("/sign-in")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> signIn(@RequestBody User loginUser) throws Exception {
+    public ResponseEntity<Map<String,Object>> signIn(@RequestBody User loginUser) {
         Map<String,Object> map = new HashMap<String,Object>();
-        Map<String, Object> claims = new HashMap<String, Object>();
-        User user = userService.getUserForIdentify(loginUser.getUsername());
-        if (user.getPassword().equals(loginUser.getPassword())) {
-            claims.put("userId", user.getId());
-            map.put("token", jwtHelper.generateToken(claims));
-            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
-        } else {
-            map.put("error", "登录帐号或者登录密码错误");
-            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.NOT_ACCEPTABLE);
+        try{
+            Map<String, Object> claims = new HashMap<String, Object>();
+            User user = userService.getUserForIdentify(loginUser.getUsername());
+            if ( user!=null && user.getPassword().equals(loginUser.getPassword())) {
+                map.put("message", "Success!");
+                claims.put("userId", user.getId());
+                map.put("token", jwtHelper.generateToken(claims));
+                return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+            } else {
+                map.put("message", "登录帐号或者登录密码错误");
+                return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+            }
+        }catch (Exception e){
+            map.put("message", e.getMessage());
+            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.BAD_REQUEST);
         }
+
     }
 }

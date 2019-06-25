@@ -7,6 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class JwtFilter implements Filter {
     private static final org.springframework.util.PathMatcher pathMatcher = new AntPathMatcher();
     public JwtFilter(JwtHelper jwtHelper, String[] authorisedUrls) {
         this.jwtHelper = jwtHelper;
-        urls = Arrays.asList(authorisedUrls);
+        urls = new ArrayList<String>(Arrays.asList(authorisedUrls));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JwtFilter implements Filter {
         }
         String spath = httpRequest.getServletPath();
         try {
-            // 验证受保护的接口
+            //验证受保护的接口
             for (String url : urls) {
                 if (pathMatcher.match(url, spath)) {
                     Object token = jwtHelper.validateTokenAndGetClaims(httpRequest);

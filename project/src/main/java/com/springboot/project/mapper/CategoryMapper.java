@@ -27,7 +27,7 @@ public interface CategoryMapper {
     Category getCategory(int id,int userId);
 
     @Insert("insert into category_table(name,user_id)" +
-            " values(#{name,createUser.id})")
+            " values(#{name},#{createUser.id})")
     @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
     int insert(Category category);
 
