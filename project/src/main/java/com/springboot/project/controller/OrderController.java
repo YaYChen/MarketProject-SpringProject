@@ -28,32 +28,32 @@ public class OrderController {
     }
 
 
-    @GetMapping(value = "/get-order-by-serial")
+    @GetMapping(value = "/p/get-order-by-serial")
     @ResponseBody
     public ResponseEntity<Order> getOrderBySerial(@RequestParam(value = "serial") String serial){
         return ResponseEntity.ok(orderService.getOrderBySerial(serial));
     }
 
-    @GetMapping(value = "/get-all-order")
+    @GetMapping(value = "/p/get-all-order")
     @ResponseBody
     public ResponseEntity<List<Order>> getAllOrder(){
         Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
         return ResponseEntity.ok(orderService.getAllOrder(Integer.getInteger(claim.get("userId").toString())));
     }
 
-    @GetMapping(value = "/search-order-by-user")
+    @GetMapping(value = "/p/search-order-by-user")
     @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByUser(@RequestParam(value = "user_id") int userID){
         return ResponseEntity.ok(orderService.searchOrderByUser(userID));
     }
 
-    @PostMapping(value = "/search-order-by-date")
+    @PostMapping(value = "/p/search-order-by-date")
     @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByDate(@RequestBody DateParam dateParam){
         return ResponseEntity.ok(orderService.searchOrderByDate(dateParam.start,dateParam.end));
     }
 
-    @PostMapping(value = "/create-order")
+    @PostMapping(value = "/p/create-order")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> createOrder(@RequestBody Order order){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -67,7 +67,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping(value = "/update-order")
+    @PostMapping(value = "/p/update-order")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateOrder(@RequestBody Order order){
         Map<String,Object> map = new HashMap<String, Object>();
@@ -81,7 +81,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping(value = "/delete-order")
+    @PostMapping(value = "/p/delete-order")
     @ResponseBody
     public ResponseEntity<Map<String,String>> deleteOrder(@RequestBody String serial){
         Map<String,String> map = new HashMap<String,String>();

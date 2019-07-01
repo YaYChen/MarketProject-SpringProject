@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin//跨域注解
 public class HomeController {
 
-    @RequestMapping("/home")
+    @RequestMapping("/p/home")
     public String home(){
         return "home";
     }

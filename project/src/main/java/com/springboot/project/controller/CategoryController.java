@@ -30,14 +30,14 @@ public class CategoryController {
         this.jwtHelper = jwtHelper;
     }
 
-    @GetMapping(value = "/getCategories")
+    @GetMapping(value = "/p/getCategories")
     @ResponseBody
     public ResponseEntity<List<Category>> getCategories(){
         Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
         return ResponseEntity.ok(categoryService.getAllCategories(Integer.getInteger(claim.get("userId").toString())));
     }
 
-    @PostMapping(value = "/update-category")
+    @PostMapping(value = "/p/update-category")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> update(@RequestBody Category category){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -51,7 +51,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping(value = "/insert-category")
+    @PostMapping(value = "/p/insert-category")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Category category){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -65,7 +65,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping(value = "/delete-category")
+    @DeleteMapping(value = "/p/delete-category")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();

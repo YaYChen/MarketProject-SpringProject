@@ -57,6 +57,8 @@ public class UserController {
                 map.put("message", "Success!");
                 claims.put("userId", user.getId());
                 map.put("token", jwtHelper.generateToken(claims));
+                map.put("username", user.getUsername());
+                map.put("userId", user.getId());
                 return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
             } else {
                 map.put("message", "登录帐号或者登录密码错误");

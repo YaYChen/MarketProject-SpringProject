@@ -29,7 +29,7 @@ public class SupplierController {
         this.jwtHelper = jwtHelper;
     }
 
-    @GetMapping(value = "/getAllSupplier")
+    @GetMapping(value = "/p/getAllSupplier")
     @ResponseBody
     public ResponseEntity<List<Supplier>> getAllSupplier(){
         int userId = Integer.getInteger(
@@ -38,7 +38,7 @@ public class SupplierController {
         return ResponseEntity.ok(supplierService.getAllSupplier(userId));
     }
 
-    @GetMapping(value = "/getSupplierByID")
+    @GetMapping(value = "/p/getSupplierByID")
     @ResponseBody
     public ResponseEntity<Supplier> getSupplierByID(@RequestParam("id") int id){
         int userId = Integer.getInteger(
@@ -47,7 +47,7 @@ public class SupplierController {
         return ResponseEntity.ok(supplierService.getSupplierByID(id,userId));
     }
 
-    @PostMapping(value = "/updateSupplier")
+    @PostMapping(value = "/p/updateSupplier")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> update(@RequestBody Supplier supplier){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -61,7 +61,7 @@ public class SupplierController {
         }
     }
 
-    @PostMapping(value = "/insertSupplier")
+    @PostMapping(value = "/p/insertSupplier")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Supplier supplier){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -75,7 +75,7 @@ public class SupplierController {
         }
     }
 
-    @DeleteMapping(value = "/deleteSupplier")
+    @DeleteMapping(value = "/p/deleteSupplier")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();

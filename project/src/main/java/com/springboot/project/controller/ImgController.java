@@ -23,7 +23,7 @@ public class ImgController {
         this.storageService = storageService;
     }
 
-    @RequestMapping(value = "/upload-img",method = RequestMethod.POST)
+    @RequestMapping(value = "/p/upload-img",method = RequestMethod.POST)
     public ResponseEntity<Map<String,Object>> saveImg(@RequestBody MultipartFile file){
         Map<String,Object> map = new HashMap<String,Object>();
         if (!file.isEmpty()) {
@@ -42,7 +42,7 @@ public class ImgController {
         }
     }
 
-    @RequestMapping(value = "/show-img",method = RequestMethod.GET,produces = "image/jpg")
+    @RequestMapping(value = "/p/show-img",method = RequestMethod.GET,produces = "image/jpg")
     public ResponseEntity<?> showImg(@RequestParam("fileName") String fileName){
         try {
             Resource file = storageService.loadAsResource(fileName);

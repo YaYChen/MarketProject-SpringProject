@@ -30,7 +30,7 @@ public class ProductController {
         this.jwtHelper = jwtHelper;
     }
 
-    @GetMapping(value = "/products-ByCategory")
+    @GetMapping(value = "/p/products-ByCategory")
     @ResponseBody
     public ResponseEntity<List<Product>> products(@RequestParam("category") int category){
         int userId = Integer.getInteger(
@@ -39,7 +39,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByCategory(category,userId));
     }
 
-    @GetMapping(value = "/product-ByCode")
+    @GetMapping(value = "/p/product-ByCode")
     @ResponseBody
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
         int userId = Integer.getInteger(
@@ -48,7 +48,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByCode(code,userId));
     }
 
-    @PostMapping(value = "/update-product")
+    @PostMapping(value = "/p/update-product")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> update(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -62,7 +62,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping(value = "/insert-product")
+    @PostMapping(value = "/p/insert-product")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -76,7 +76,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping(value = "/delete-product")
+    @DeleteMapping(value = "/p/delete-product")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -90,7 +90,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping(value = "/getWholeSalesVolume")
+    @GetMapping(value = "/p/getWholeSalesVolume")
     @ResponseBody
     public ResponseEntity<List<SalesVolume>> getWholeSalesVolume(){
         return ResponseEntity.ok(productService.getWholeSalesVolume());
