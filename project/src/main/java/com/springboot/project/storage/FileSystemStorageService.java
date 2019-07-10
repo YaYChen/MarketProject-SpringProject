@@ -21,11 +21,18 @@ import java.util.stream.Stream;
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
+    private Path rootLocation;
+
+    private StorageProperties properties;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
-            this.rootLocation = Paths.get(properties.getLocation());
+        this.properties = properties;
+    }
+
+    @Override
+    public void setPath(String userId){
+        this.rootLocation = Paths.get(properties.getLocation() + "/" + userId);
     }
 
     @Override

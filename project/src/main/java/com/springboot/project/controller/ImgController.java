@@ -40,6 +40,7 @@ public class ImgController {
         if (!file.isEmpty()) {
             try {
                 String fileName = userId+ "_" + file.getOriginalFilename();
+                storageService.setPath(String.valueOf(userId));
                 storageService.store(file);
                 map.put("message", fileName);
                 return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -56,6 +57,10 @@ public class ImgController {
     @RequestMapping(value = "/p/show-img",method = RequestMethod.GET,produces = "image/jpg")
     public ResponseEntity<?> showImg(@RequestParam("fileName") String fileName){
         try {
+            int userId = Integer.getInteger(
+                    jwtHelper.validateTokenAndGetClaims(request)
+                            .get("userId").toString());
+            storageService.setPath(String.valueOf(userId));
             Resource file = storageService.loadAsResource(fileName);
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment; filename=\"" + file.getFilename() + "\"").body(file);
