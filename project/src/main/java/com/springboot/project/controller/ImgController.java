@@ -1,5 +1,6 @@
 package com.springboot.project.controller;
 
+import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,19 +18,28 @@ import java.util.Map;
 @CrossOrigin//跨域注解
 public class ImgController {
 
+    @Autowired
+    private HttpServletRequest request;
+
     private final StorageService storageService;
 
+    private JwtHelper jwtHelper;
+
     @Autowired
-    public ImgController(StorageService storageService) {
+    public ImgController(StorageService storageService,JwtHelper jwtHelper) {
         this.storageService = storageService;
+        this.jwtHelper = jwtHelper;
     }
 
     @RequestMapping(value = "/p/upload-img",method = RequestMethod.POST)
     public ResponseEntity<Map<String,Object>> saveImg(@RequestBody MultipartFile file){
         Map<String,Object> map = new HashMap<String,Object>();
+        int userId = Integer.getInteger(
+                jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId").toString());
         if (!file.isEmpty()) {
             try {
-                String fileName = file.getOriginalFilename();
+                String fileName = userId+ "_" + file.getOriginalFilename();
                 storageService.store(file);
                 map.put("message", fileName);
                 return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

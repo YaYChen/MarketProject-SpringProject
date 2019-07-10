@@ -52,12 +52,12 @@ public class UserController {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             Map<String, Object> claims = new HashMap<String, Object>();
-            User user = userService.getUserForIdentify(loginUser.getUsername());
+            User user = userService.getUserForIdentify(loginUser.getLoginName());
             if ( user!=null && user.getPassword().equals(loginUser.getPassword())) {
                 map.put("message", "Success!");
                 claims.put("userId", user.getId());
                 map.put("token", jwtHelper.generateToken(claims));
-                map.put("username", user.getUsername());
+                map.put("username", user.getLoginName());
                 map.put("userId", user.getId());
                 return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
             } else {
