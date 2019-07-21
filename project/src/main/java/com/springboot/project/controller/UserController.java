@@ -57,7 +57,7 @@ public class UserController {
                 map.put("message", "Success!");
                 claims.put("userId", user.getId());
                 map.put("token", jwtHelper.generateToken(claims));
-                map.put("username", user.getLoginName());
+                map.put("userName", user.getUserName());
                 map.put("userId", user.getId());
                 return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
             } else {

@@ -34,9 +34,6 @@ public class JwtFilter implements Filter {
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         if ("OPTIONS".equals(httpRequest.getMethod())) {
             httpResponse.setStatus(HttpStatus.NO_CONTENT.value()); // HttpStatus.SC_NO_CONTENT = 204
-            httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
-            httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with, Token");
-            httpResponse.setHeader("Access-Control-Allow-Methods", "OPTIONS,GET,POST,DELETE,PUT");
         }
         String spath = httpRequest.getServletPath();
         try {
@@ -48,7 +45,8 @@ public class JwtFilter implements Filter {
                         chain.doFilter(request, response);
                         return;
                     }else{
-                        httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UNAUTHORIZED");
+                        httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        httpResponse.getWriter().write("UNAUTHORIZED");
                         return;
                     }
                 }else{

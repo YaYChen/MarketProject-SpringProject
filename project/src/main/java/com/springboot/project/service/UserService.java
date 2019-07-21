@@ -25,8 +25,8 @@ public class UserService {
         return  list;
     }
 
-    public User getUserForIdentify(String name){
-        return userMapper.getUserByName(name);
+    public User getUserForIdentify(String loginName){
+        return userMapper.getUserByLoginName(loginName);
     }
 
     public  User registeUser(User newUser){
