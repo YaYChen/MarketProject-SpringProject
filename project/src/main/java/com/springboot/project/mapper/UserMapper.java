@@ -33,7 +33,7 @@ public interface UserMapper {
     })
     User getUserByID(int user_id);
 
-    @Select("select * from user_table where name = #{userName}")
+    @Select("select * from user_table where login_name = #{loginName}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "loginName",  column = "login_name"),
@@ -44,7 +44,7 @@ public interface UserMapper {
             @Result(property = "lastLoginTime", column = "last_login_time"),
             @Result(property = "count", column = "count")
     })
-    User getUserByName(String userName);
+    User getUserByLoginName(String loginName);
 
     @Insert("insert into user_table(login_name,password,user_name,user_mobile,gen_time,last_login_time,count) " +
             " values(#{loginName}," +
