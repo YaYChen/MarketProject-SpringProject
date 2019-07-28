@@ -1,5 +1,6 @@
 package com.springboot.project.authenticate;
 
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.AntPathMatcher;
 
@@ -32,11 +33,19 @@ public class JwtFilter implements Filter {
         httpResponse.setCharacterEncoding("UTF-8");
         httpResponse.setContentType("application/json; charset=utf-8");
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
-        if ("OPTIONS".equals(httpRequest.getMethod())) {
-            httpResponse.setStatus(HttpStatus.NO_CONTENT.value()); // HttpStatus.SC_NO_CONTENT = 204
-        }
-        String spath = httpRequest.getServletPath();
+        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        httpResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization");
+        httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
         try {
+            if (httpRequest.getHeader("Access-Control-Request-Method") != null
+                    && "OPTIONS".equals(httpRequest.getMethod())) {// CORS "pre-flight" request
+                httpResponse.addHeader("Access-Control-Max-Age", "7200");
+                httpResponse.setStatus(200);
+                httpResponse.getWriter().write("OK");
+                return;
+            }
+            String spath = httpRequest.getServletPath();
             //验证受保护的接口
             for (String url : urls) {
                 if (pathMatcher.match(url, spath)) {

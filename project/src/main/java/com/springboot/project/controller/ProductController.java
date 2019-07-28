@@ -45,6 +45,7 @@ public class ProductController {
         int userId = Integer.getInteger(
                 jwtHelper.validateTokenAndGetClaims(request)
                         .get("userId").toString());
+        System.out.println(userId);
         return ResponseEntity.ok(productService.getProductByCode(code,userId));
     }
 

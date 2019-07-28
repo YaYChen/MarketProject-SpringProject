@@ -1,23 +1,56 @@
-# MarketProject-SpringProject
-MarketProject-SpringProject
+# Market Project
 
-Docker file:
-FROM openjdk:8-jre-alpine
+## 描述
 
-ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
-    APP_SLEEP=0 \
-    JAVA_OPTS=""
+模拟超市收银机与商品管理功能的应用
 
-# Add a user to run our application so that it doesn't need to run as root
-RUN adduser -D -s /bin/sh sbbp
-WORKDIR /home/sbbp
+包含：
 
-USER sbbp
+- 服务器端spring boot应用（docker 容器封装运行）
+- 服务器端Node.js应用（docker 容器封装运行）
+- 客户端Android应用
 
-ADD ./build/libs/*.war app.war
+## 框架
 
-CMD echo "The application will start in ${APP_SLEEP}s..." && \
-    sleep ${APP_SLEEP} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar "${HOME}/app.war" "$@"
+![捕获02](E:\临时文件\捕获02.PNG)
 
-EXPOSE 8080 5701/udp
+## 技术
+
+后端:
+
+- Spring Boot
+- MySql
+- Mybatis
+- Redis
+- Jwt
+- Log4j
+- docker
+
+前端：
+
+- Nuxt
+- Vue
+- Vuex
+- Axios
+- docker
+
+移动端：
+
+- Android
+- ZXing
+
+
+
+# Spring Project
+
+## 描述
+
+使用Spring Boot搭建 Http Resetful服务应用
+
+包含：
+
+- Mybatis+Mysql数据服务
+- Log4j日志服务
+- Jwt认证服务
+- Redis缓存服务
+- Docker容器服务
