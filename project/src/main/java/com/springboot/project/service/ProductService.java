@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,18 +29,22 @@ public class ProductService {
     }
 
     @Cacheable(value = "productCache",key = "#id")
-    public Product getProductById(int id,int userId){
-        return productMapper.getProductByID(id,userId);
+    public Product getProductById(int id){
+        return productMapper.getProductByID(id);
     }
 
-    @Cacheable(value = "productCache",key = "#code")
+    @Cacheable(value = "productCache",key = "#root.method.name.concat(#userId)",unless = "#result=null")
     public Product getProductByCode(String code,int userId){
-        return productMapper.getProductByCode(code,userId);
+        return productMapper.getProductByCode(code).stream().filter(
+                (Product p) -> userId == p.getCreateUser().getId()
+        ).collect(Collectors.toList()).get(0);
     }
 
-    @Cacheable(value = "productCache",key = "#categoryID")
+    @Cacheable(value = "productCache",key = "#root.method.name.concat(#categoryID)",unless = "#result=null")
     public List<Product> getProductByCategory(int categoryID,int userId){
-        return productMapper.getProductsByCategory(categoryID,userId);
+        return productMapper.getProductsByCategory(categoryID).stream().filter(
+                (Product p) -> userId == p.getCreateUser().getId()
+        ).collect(Collectors.toList());
     }
 
     @CachePut(value = "productCache",key = "#result.id")
@@ -50,7 +55,7 @@ public class ProductService {
 
     public Product insertProduct(Product product) throws Exception{
         int id = productMapper.insert(product);
-        return this.getProductById(id,product.getCreateUser().getId());
+        return this.getProductById(id);
     }
 
     @CacheEvict(value = "productCache",key = "#id")

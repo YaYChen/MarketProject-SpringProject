@@ -16,7 +16,7 @@ public interface SupplierMapper {
             @Result(property = "phone",column = "phone"),
             @Result(property = "picture",column = "picture"),
             @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategory",fetchType = FetchType.EAGER))
+                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.EAGER))
     })
     List<Supplier> selectAll(int userId);
 
@@ -28,7 +28,7 @@ public interface SupplierMapper {
             @Result(property = "phone",column = "phone"),
             @Result(property = "picture",column = "picture"),
             @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategory",fetchType = FetchType.EAGER))
+                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.EAGER))
     })
     Supplier getSupplierByID(int supplier_id,int userId);
 

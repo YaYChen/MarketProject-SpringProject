@@ -59,14 +59,15 @@ public class JwtFilter implements Filter {
                         return;
                     }
                 }else{
-                    chain.doFilter(request, response);
+                    //chain.doFilter(request, response);
                     return;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+            httpResponse.getWriter().write(e.getMessage());
         }
-        chain.doFilter(request, response);
+        //chain.doFilter(request, response);
         return;
     }
 

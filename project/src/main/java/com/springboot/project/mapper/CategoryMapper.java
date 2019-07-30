@@ -17,14 +17,14 @@ public interface CategoryMapper {
     })
     List<Category> getAll(int userId);
 
-    @Select("select * from category_table where id = #{id} and user_id = #{userId}")
+    @Select("select * from category_table where id = #{id}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "name",  column = "name"),
             @Result(property = "userId",column = "user_id",
                     one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
     })
-    Category getCategory(int id,int userId);
+    Category getCategoryById(int id);
 
     @Insert("insert into category_table(name,user_id)" +
             " values(#{name},#{createUser.id})")

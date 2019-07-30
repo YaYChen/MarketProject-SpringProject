@@ -33,19 +33,18 @@ public class ProductController {
     @GetMapping(value = "/p/products-ByCategory")
     @ResponseBody
     public ResponseEntity<List<Product>> products(@RequestParam("category") int category){
-        int userId = Integer.getInteger(
-                jwtHelper.validateTokenAndGetClaims(request)
-                        .get("userId").toString());
+        int userId =
+                (int)jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId");
         return ResponseEntity.ok(productService.getProductByCategory(category,userId));
     }
 
     @GetMapping(value = "/p/product-ByCode")
     @ResponseBody
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
-        int userId = Integer.getInteger(
-                jwtHelper.validateTokenAndGetClaims(request)
-                        .get("userId").toString());
-        System.out.println(userId);
+        Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
+        int userId = (int)userInfo.get("userId");
+        System.out.println("UserId: " + userId);
         return ResponseEntity.ok(productService.getProductByCode(code,userId));
     }
 

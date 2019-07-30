@@ -8,27 +8,13 @@ import java.util.List;
 
 public interface ProductMapper {
 
-    @Select("select * from product_table where id = #{product_id} and user_id = #{userId} ")
+    @Select("select * from product_table where id = #{product_id}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "code",column = "code"),
             @Result(property = "name",column = "name"),
             @Result(property = "category",column= "category_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategory",fetchType = FetchType.EAGER)),
-            @Result(property = "specification",column = "specification"),
-            @Result(property = "productPicture",column = "productPicture"),
-            @Result(property = "purchasePrice",column = "purchasePrice"),
-            @Result(property = "price",column = "price")
-    })
-    Product getProductByID(int product_id,int userId);
-
-    @Select("select * from product_table where code = #{code} and user_id = #{userId}")
-    @Results({
-            @Result(property = "id",column = "id"),
-            @Result(property = "code",column = "code"),
-            @Result(property = "name",column = "name"),
-            @Result(property = "category",column= "category_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategory",fetchType = FetchType.EAGER)),
+                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.EAGER)),
             @Result(property = "specification",column = "specification"),
             @Result(property = "productPicture",column = "productPicture"),
             @Result(property = "purchasePrice",column = "purchasePrice"),
@@ -36,23 +22,39 @@ public interface ProductMapper {
             @Result(property = "createUser",column = "user_id",
                     one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
     })
-    Product getProductByCode(String code,int userId);
+    Product getProductByID(int product_id);
 
-    @Select("select * from product_table where category_id = #{category_id} and user_id = #{userId")
+    @Select("select * from product_table where code = #{code}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "code",column = "code"),
             @Result(property = "name",column = "name"),
             @Result(property = "category",column= "category_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategory")),
+                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.DEFAULT)),
             @Result(property = "specification",column = "specification"),
             @Result(property = "productPicture",column = "productPicture"),
             @Result(property = "purchasePrice",column = "purchasePrice"),
             @Result(property = "price",column = "price"),
             @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
+                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.DEFAULT))
     })
-    List<Product> getProductsByCategory(int category_id,int userId);
+    List<Product> getProductByCode(String code);
+
+    @Select("select * from product_table where category_id = #{category_id}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "code",column = "code"),
+            @Result(property = "name",column = "name"),
+            @Result(property = "category",column= "category_id",
+                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.DEFAULT)),
+            @Result(property = "specification",column = "specification"),
+            @Result(property = "productPicture",column = "productPicture"),
+            @Result(property = "purchasePrice",column = "purchasePrice"),
+            @Result(property = "price",column = "price"),
+            @Result(property = "createUser",column = "user_id",
+                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.DEFAULT))
+    })
+    List<Product> getProductsByCategory(int category_id);
 
     @Insert("insert into product_table(code,name,category_id,specification,productPicture,purchasePrice,price,user_id) " +
             " values(#{code}," +
