@@ -35,16 +35,19 @@ public class JwtFilter implements Filter {
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         httpResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Content-Type,Authorization");
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "*");
+        httpResponse.setHeader("Access-Control-Expose-Headers", "*");
+        if (httpRequest.getHeader("Access-Control-Request-Method") != null
+                && "OPTIONS".equals(httpRequest.getMethod())) {
+            httpResponse.addHeader("Access-Control-Max-Age", "7200");
+            httpResponse.setStatus(200);
+            httpResponse.getWriter().write("OK");
+            return;
+        }
         try {
-            if (httpRequest.getHeader("Access-Control-Request-Method") != null
-                    && "OPTIONS".equals(httpRequest.getMethod())) {// CORS "pre-flight" request
-                httpResponse.addHeader("Access-Control-Max-Age", "7200");
-                httpResponse.setStatus(200);
-                httpResponse.getWriter().write("OK");
-                return;
-            }
+
             String spath = httpRequest.getServletPath();
             //验证受保护的接口
             for (String url : urls) {

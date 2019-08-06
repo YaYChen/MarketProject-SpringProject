@@ -54,7 +54,7 @@ public interface OrderMapper {
     })
     Order getOne(String serial);
 
-    @Select("Select * from order_table where create_time > #{start} and create_time <= #{end} order by create_time desc")
+    @Select("Select * from order_table where create_time > #{start} and create_time <= #{end} and user_id = #{userId} order by create_time desc")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
@@ -67,7 +67,7 @@ public interface OrderMapper {
             @Result(property = "orderItems",column = "id",
                     many = @Many(select = "com.springboot.project.mapper.OrderItemMapper.getOrderItems",fetchType = FetchType.EAGER))
     })
-    List<Order> searchByDate(Date start,Date end);
+    List<Order> searchByDate(Date start,Date end,int userId);
 
     @Select("select * from order_table where user_id = #{user_id}")
     @Results({

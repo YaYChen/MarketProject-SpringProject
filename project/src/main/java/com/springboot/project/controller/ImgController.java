@@ -21,26 +21,23 @@ public class ImgController {
     @Autowired
     private HttpServletRequest request;
 
-    private final StorageService storageService;
+    @Autowired
+    private StorageService storageService;
 
     private JwtHelper jwtHelper;
 
     @Autowired
-    public ImgController(StorageService storageService,JwtHelper jwtHelper) {
-        this.storageService = storageService;
+    public ImgController(JwtHelper jwtHelper) {
         this.jwtHelper = jwtHelper;
     }
 
-    @RequestMapping(value = "/p/upload-img",method = RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> saveImg(@RequestBody MultipartFile file){
+    @RequestMapping(value = "/upload-img",method = RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> saveImg(@RequestParam("userId") String userId, @RequestBody MultipartFile file){
         Map<String,Object> map = new HashMap<String,Object>();
-        int userId = Integer.getInteger(
-                jwtHelper.validateTokenAndGetClaims(request)
-                        .get("userId").toString());
         if (!file.isEmpty()) {
             try {
-                String fileName = userId+ "_" + file.getOriginalFilename();
-                storageService.setPath(String.valueOf(userId));
+                String fileName = file.getOriginalFilename();
+                storageService.setPath(userId);
                 storageService.store(file);
                 map.put("message", fileName);
                 return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -54,13 +51,10 @@ public class ImgController {
         }
     }
 
-    @RequestMapping(value = "/p/show-img",method = RequestMethod.GET,produces = "image/jpg")
-    public ResponseEntity<?> showImg(@RequestParam("fileName") String fileName){
+    @RequestMapping(value = "/show-img",method = RequestMethod.GET,produces = "image/jpg")
+    public ResponseEntity<?> showImg(@RequestParam("fileName") String fileName, @RequestParam("userId") String userId){
         try {
-            int userId = Integer.getInteger(
-                    jwtHelper.validateTokenAndGetClaims(request)
-                            .get("userId").toString());
-            storageService.setPath(String.valueOf(userId));
+            storageService.setPath(userId);
             Resource file = storageService.loadAsResource(fileName);
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment; filename=\"" + file.getFilename() + "\"").body(file);

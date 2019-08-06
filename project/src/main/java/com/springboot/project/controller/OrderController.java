@@ -31,26 +31,39 @@ public class OrderController {
     @GetMapping(value = "/p/get-order-by-serial")
     @ResponseBody
     public ResponseEntity<Order> getOrderBySerial(@RequestParam(value = "serial") String serial){
-        return ResponseEntity.ok(orderService.getOrderBySerial(serial));
+        return ResponseEntity.ok(
+                orderService.getOrderBySerial(serial)
+        );
     }
 
     @GetMapping(value = "/p/get-all-order")
     @ResponseBody
     public ResponseEntity<List<Order>> getAllOrder(){
-        Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
-        return ResponseEntity.ok(orderService.getAllOrder(Integer.getInteger(claim.get("userId").toString())));
+        Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
+        return ResponseEntity.ok(
+                orderService.getAllOrder((int)userInfo.get("userId"))
+        );
     }
 
     @GetMapping(value = "/p/search-order-by-user")
     @ResponseBody
-    public ResponseEntity<List<Order>> searchOrderByUser(@RequestParam(value = "user_id") int userID){
-        return ResponseEntity.ok(orderService.searchOrderByUser(userID));
+    public ResponseEntity<List<Order>> searchOrderByUser(){
+        Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
+        return ResponseEntity.ok(
+                orderService.searchOrderByUser((int)userInfo.get("userId"))
+        );
     }
 
     @PostMapping(value = "/p/search-order-by-date")
     @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByDate(@RequestBody DateParam dateParam){
-        return ResponseEntity.ok(orderService.searchOrderByDate(dateParam.start,dateParam.end));
+        Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
+        return ResponseEntity.ok(
+                orderService.searchOrderByDate(
+                        dateParam.start,
+                        dateParam.end,
+                        (int)userInfo.get("userId"))
+        );
     }
 
     @PostMapping(value = "/p/create-order")

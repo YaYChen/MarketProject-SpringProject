@@ -3,12 +3,12 @@ package com.springboot.project.storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
-@Service
+@Component
 public class FileSystemStorageService implements StorageService {
 
     private Path rootLocation;
@@ -32,7 +32,17 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void setPath(String userId){
-        this.rootLocation = Paths.get(properties.getLocation() + "/" + userId);
+        try{
+            this.rootLocation = Paths.get(properties.getLocation() + "/" + userId);
+            File file =new File(properties.getLocation() + "/" + userId);
+            if  (!file .exists()  && !file .isDirectory())
+            {
+                file .mkdir();
+            }
+        }catch (Exception e){
+            throw e;
+        }
+
     }
 
     @Override

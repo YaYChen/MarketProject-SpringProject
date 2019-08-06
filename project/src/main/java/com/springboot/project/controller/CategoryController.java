@@ -34,7 +34,7 @@ public class CategoryController {
     @ResponseBody
     public ResponseEntity<List<Category>> getCategories(){
         Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
-        return ResponseEntity.ok(categoryService.getAllCategories(Integer.getInteger(claim.get("userId").toString())));
+        return ResponseEntity.ok(categoryService.getAllCategories((int)claim.get("userId")));
     }
 
     @PostMapping(value = "/p/update-category")

@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.EnableCaching;
  *
  */
 @SpringBootApplication
-@MapperScan("com.springboot.project.*")
+@MapperScan("com.springboot.project.mapper")
 public class App 
 {
     public static void main( String[] args )
