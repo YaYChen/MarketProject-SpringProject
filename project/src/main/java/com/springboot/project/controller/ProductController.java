@@ -3,6 +3,7 @@ package com.springboot.project.controller;
 import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Product;
 import com.springboot.project.entity.SalesVolume;
+import com.springboot.project.entity.User;
 import com.springboot.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,9 +43,9 @@ public class ProductController {
     @GetMapping(value = "/p/product-ByCode")
     @ResponseBody
     public ResponseEntity<Product> product_ByCode(@RequestParam("code") String code){
-        Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
-        int userId = (int)userInfo.get("userId");
-        System.out.println("UserId: " + userId);
+        int userId =
+                (int)jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId");
         return ResponseEntity.ok(productService.getProductByCode(code,userId));
     }
 
@@ -67,6 +68,12 @@ public class ProductController {
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Product product){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
+            int userId =
+                    (int)jwtHelper.validateTokenAndGetClaims(request)
+                            .get("userId");
+            User user =new User();
+            user.setId(userId);
+            product.setCreateUser(user);
             productService.insertProduct(product);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

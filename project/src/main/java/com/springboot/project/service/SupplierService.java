@@ -20,12 +20,12 @@ public class SupplierService {
     @Autowired
     public SupplierService(SupplierMapper supplierMapper){this.supplierMapper = supplierMapper;}
 
-    @Cacheable(value = "supplierCache",key = "#root.methodName")
+    @Cacheable(value = "supplierCache",key = "#root.methodName",unless = "#result == null")
     public List<Supplier> getAllSupplier(int userId){
         return supplierMapper.selectAll(userId);
     }
 
-    @Cacheable(value = "supplierCache",key = "#id")
+    @Cacheable(value = "supplierCache",key = "#id",unless = "#result == null")
     public Supplier getSupplierByID(int id,int userId){
         return supplierMapper.getSupplierByID(id,userId);
     }

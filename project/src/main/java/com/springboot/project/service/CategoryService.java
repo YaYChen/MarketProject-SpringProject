@@ -22,12 +22,12 @@ public class CategoryService {
         this.categoryMapper = categoryMapper;
     }
 
-    @Cacheable(value = "categoryCache",key = "#id")
+    @Cacheable(value = "categoryCache",key = "#id",unless = "#result == null")
     public Category getCategoryById(int id){
         return categoryMapper.getCategoryById(id);
     }
 
-    @Cacheable(value = "categoryCache",key = "#root.methodName.concat(#userId)")
+    @Cacheable(value = "categoryCache",key = "#root.methodName.concat(#userId)",unless = "#result == null")
     public List<Category> getAllCategories(int userId){
         return categoryMapper.getAll(userId);
     }

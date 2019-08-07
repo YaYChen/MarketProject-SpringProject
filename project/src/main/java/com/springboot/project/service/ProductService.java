@@ -33,18 +33,14 @@ public class ProductService {
         return productMapper.getProductByID(id);
     }
 
-    @Cacheable(value = "productCache",key = "#root.method.name.concat(#userId)",unless = "#result=null")
+    @Cacheable(value = "productCache",key = "#root.method.name.concat(#code)",unless = "#result == null")
     public Product getProductByCode(String code,int userId){
-        return productMapper.getProductByCode(code).stream().filter(
-                (Product p) -> userId == p.getCreateUser().getId()
-        ).collect(Collectors.toList()).get(0);
+        return productMapper.getProductByCode(code,userId);
     }
 
-    @Cacheable(value = "productCache",key = "#root.method.name.concat(#categoryID)",unless = "#result=null")
+    @Cacheable(value = "productCache",key = "#root.method.name.concat(#categoryID)",unless = "#result == null")
     public List<Product> getProductByCategory(int categoryID,int userId){
-        return productMapper.getProductsByCategory(categoryID).stream().filter(
-                (Product p) -> userId == p.getCreateUser().getId()
-        ).collect(Collectors.toList());
+        return productMapper.getProductsByCategory(categoryID, userId);
     }
 
     @CachePut(value = "productCache",key = "#result.id")
@@ -53,9 +49,8 @@ public class ProductService {
         return product;
     }
 
-    public Product insertProduct(Product product) throws Exception{
-        int id = productMapper.insert(product);
-        return this.getProductById(id);
+    public void insertProduct(Product product) throws Exception{
+        productMapper.insert(product);
     }
 
     @CacheEvict(value = "productCache",key = "#id")

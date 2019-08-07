@@ -28,22 +28,22 @@ public class OrderService {
         this.orderItemMapper = orderItemMapper;
     }
 
-    @Cacheable(value = "orderCache",key = "#serial")
-    public Order getOrderBySerial(String serial){
-        return orderMapper.getOne(serial);
+    @Cacheable(value = "orderCache",key = "#serial",unless = "#result == null")
+    public Order getOrderBySerial(String serial,int usesrId){
+        return orderMapper.getOne(serial,usesrId);
     }
 
-    @Cacheable(value = "orderCache",key = "#id")
+    @Cacheable(value = "orderCache",key = "#id",unless = "#result == null")
     public Order getOrderById(int id){
         return orderMapper.getOrderById(id);
     }
 
-    @Cacheable(value = "orderCache",key = "#root.methodName.concat(#userId)")
+    @Cacheable(value = "orderCache",key = "#root.methodName.concat(#userId)",unless = "#result == null")
     public List<Order> getAllOrder(int userId){
         return orderMapper.getAllOrder(userId);
     }
 
-    @Cacheable(value = "orderCache",key = "#root.methodName.concat(#userId)")
+    @Cacheable(value = "orderCache",key = "#root.methodName.concat(#userId)",unless = "#result == null")
     public List<Order> searchOrderByUser(int userId){
         return orderMapper.searchByUser(userId);
     }
@@ -52,20 +52,19 @@ public class OrderService {
         return orderMapper.searchByDate(startDate, endDate, userId);
     }
 
-    public Order createOrder(Order order) throws Exception{
+    public void createOrder(Order order, int userId) throws Exception{
         order.setCreateTime(new Date());
-        int id = orderMapper.insert(order);
-        Order newOrder = orderMapper.getOne(order.getSerial());
+        orderMapper.insert(order);
+        Order newOrder = orderMapper.getOne(order.getSerial(),userId);
         for (OrderItem orderItem :order.getOrderItems()) {
             orderItem.setOrderID(newOrder.getId());
             orderItemMapper.insert(orderItem);
         }
-        return this.getOrderById(id);
     }
 
     @CachePut(value = "orderCache",key = "#result.id")
-    public Order updateOrder(Order order) throws Exception{
-        Order oldOrder = orderMapper.getOne(order.getSerial());
+    public Order updateOrder(Order order,int userId) throws Exception{
+        Order oldOrder = orderMapper.getOne(order.getSerial(),userId);
         List<Long> idList = new ArrayList<Long>();
         for(OrderItem orderItem:oldOrder.getOrderItems()){
             idList.add(orderItem.getId());
@@ -82,8 +81,8 @@ public class OrderService {
     }
 
     @CacheEvict(value = "orderCache",key = "#serial")
-    public void deleteOrder(String serial) throws Exception{
-        Order order = orderMapper.getOne(serial);
+    public void deleteOrder(String serial, int userId) throws Exception{
+        Order order = orderMapper.getOne(serial,userId);
         for(OrderItem item : order.getOrderItems()){
             orderItemMapper.delete(item.getId());
         }

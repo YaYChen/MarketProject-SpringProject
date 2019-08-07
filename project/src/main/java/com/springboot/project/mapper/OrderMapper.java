@@ -39,7 +39,7 @@ public interface OrderMapper {
     })
     Order getOrderById(int id);
 
-    @Select("select * from order_table where serial = #{serial}")
+    @Select("select * from order_table where serial = #{serial} and user_id = #{userId}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
@@ -52,7 +52,7 @@ public interface OrderMapper {
             @Result(property = "orderItems",column = "id",
                     many = @Many(select = "com.springboot.project.mapper.OrderItemMapper.getOrderItems",fetchType = FetchType.EAGER))
     })
-    Order getOne(String serial);
+    Order getOne(String serial, int userId);
 
     @Select("Select * from order_table where create_time > #{start} and create_time <= #{end} and user_id = #{userId} order by create_time desc")
     @Results({
@@ -91,8 +91,7 @@ public interface OrderMapper {
             "#{status}," +
             "#{totalPrice}," +
             "#{totalNumber})")
-    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
-    int insert(Order order);
+    void insert(Order order);
 
     @Update("update order_table set " +
             "serial=#{serial}," +

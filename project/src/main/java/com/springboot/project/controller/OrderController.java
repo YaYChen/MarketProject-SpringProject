@@ -31,8 +31,11 @@ public class OrderController {
     @GetMapping(value = "/p/get-order-by-serial")
     @ResponseBody
     public ResponseEntity<Order> getOrderBySerial(@RequestParam(value = "serial") String serial){
+        int userId =
+                (int)jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId");
         return ResponseEntity.ok(
-                orderService.getOrderBySerial(serial)
+                orderService.getOrderBySerial(serial,userId)
         );
     }
 
@@ -71,7 +74,10 @@ public class OrderController {
     public ResponseEntity<Map<String,Object>> createOrder(@RequestBody Order order){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            orderService.createOrder(order);
+            int userId =
+                    (int)jwtHelper.validateTokenAndGetClaims(request)
+                            .get("userId");
+            orderService.createOrder(order,userId);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -85,7 +91,10 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> updateOrder(@RequestBody Order order){
         Map<String,Object> map = new HashMap<String, Object>();
         try{
-            orderService.updateOrder(order);
+            int userId =
+                    (int)jwtHelper.validateTokenAndGetClaims(request)
+                            .get("userId");
+            orderService.updateOrder(order,userId);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
@@ -99,7 +108,10 @@ public class OrderController {
     public ResponseEntity<Map<String,String>> deleteOrder(@RequestBody String serial){
         Map<String,String> map = new HashMap<String,String>();
         try{
-           orderService.deleteOrder(serial);
+            int userId =
+                    (int)jwtHelper.validateTokenAndGetClaims(request)
+                            .get("userId");
+            orderService.deleteOrder(serial,userId);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,String>>(map, HttpStatus.OK);
         }catch (Exception e){
