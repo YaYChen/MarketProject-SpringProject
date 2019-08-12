@@ -1,5 +1,6 @@
 package com.springboot.project.controller;
 
+import com.springboot.project.Utils.DateParam;
 import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Order;
 import com.springboot.project.service.OrderService;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -63,8 +66,8 @@ public class OrderController {
         Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
         return ResponseEntity.ok(
                 orderService.searchOrderByDate(
-                        dateParam.start,
-                        dateParam.end,
+                        (new SimpleDateFormat("yyyyMMddHHmmss")).parse(dateParam.getStart(),new ParsePosition(0)),
+                        (new SimpleDateFormat("yyyyMMddHHmmss")).parse(dateParam.getEnd(),new ParsePosition(0)),
                         (int)userInfo.get("userId"))
         );
     }
@@ -118,10 +121,5 @@ public class OrderController {
             map.put("message", e.getMessage());
             return new ResponseEntity<Map<String,String>>(map, HttpStatus.NOT_MODIFIED);
         }
-    }
-
-    class DateParam{
-        public Date start;
-        public Date end;
     }
 }

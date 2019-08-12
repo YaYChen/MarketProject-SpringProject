@@ -9,7 +9,7 @@ import java.util.Date;
 
 public interface OrderMapper {
 
-    @Select("Select * from order_table order where user_id = #{userId} by create_time desc")
+    @Select("Select * from order_table where user_id = #{userId} order by create_time desc")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
