@@ -51,15 +51,6 @@ public class OrderController {
         );
     }
 
-    @GetMapping(value = "/p/search-order-by-user")
-    @ResponseBody
-    public ResponseEntity<List<Order>> searchOrderByUser(){
-        Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
-        return ResponseEntity.ok(
-                orderService.searchOrderByUser((int)userInfo.get("userId"))
-        );
-    }
-
     @PostMapping(value = "/p/search-order-by-date")
     @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByDate(@RequestBody DateParam dateParam){

@@ -38,20 +38,16 @@ public class OrderService {
         return orderMapper.getOrderById(id);
     }
 
-    @Cacheable(value = "orderCache",key = "#root.methodName.concat(#userId)",unless = "#result == null")
+    @Cacheable(value = "orderCache",key = "#userId",unless = "#result == null")
     public List<Order> getAllOrder(int userId){
         return orderMapper.getAllOrder(userId);
-    }
-
-    @Cacheable(value = "orderCache",key = "#root.methodName.concat(#userId)",unless = "#result == null")
-    public List<Order> searchOrderByUser(int userId){
-        return orderMapper.searchByUser(userId);
     }
 
     public List<Order> searchOrderByDate(Date startDate, Date endDate, int userId){
         return orderMapper.searchByDate(startDate, endDate, userId);
     }
 
+    @CacheEvict(value = "orderCache",key = "#userId")
     public void createOrder(Order order, int userId) throws Exception{
         order.setCreateTime(new Date());
         orderMapper.insert(order);

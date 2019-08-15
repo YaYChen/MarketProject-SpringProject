@@ -69,21 +69,6 @@ public interface OrderMapper {
     })
     List<Order> searchByDate(Date start,Date end,int userId);
 
-    @Select("select * from order_table where user_id = #{user_id}")
-    @Results({
-            @Result(property = "id",column = "id"),
-            @Result(property = "serial",column = "serial"),
-            @Result(property = "createTime",column = "create_time"),
-            @Result(property = "createUserID",column= "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
-            @Result(property = "status",column = "status"),
-            @Result(property = "totalPrice",column = "total_price"),
-            @Result(property = "totalNumber",column = "total_number"),
-            @Result(property = "orderItems",column = "id",
-                    many = @Many(select = "com.springboot.project.mapper.OrderItemMapper.getOrderItems",fetchType = FetchType.EAGER))
-    })
-    List<Order> searchByUser(int user_id);
-
     @Insert("insert into order_table(serial,create_time,user_id,status,total_price,total_number) " +
             " values(#{serial}," +
             "#{createTime}," +
