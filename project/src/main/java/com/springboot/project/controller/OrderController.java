@@ -54,11 +54,13 @@ public class OrderController {
     @PostMapping(value = "/p/search-order-by-date")
     @ResponseBody
     public ResponseEntity<List<Order>> searchOrderByDate(@RequestBody DateParam dateParam){
+        System.out.println("start:" + dateParam.getStart());
+        System.out.println("end:" + dateParam.getEnd());
         Map<String, Object> userInfo = jwtHelper.validateTokenAndGetClaims(request);
         return ResponseEntity.ok(
                 orderService.searchOrderByDate(
-                        (new SimpleDateFormat("yyyyMMddHHmmss")).parse(dateParam.getStart(),new ParsePosition(0)),
-                        (new SimpleDateFormat("yyyyMMddHHmmss")).parse(dateParam.getEnd(),new ParsePosition(0)),
+                        (new SimpleDateFormat("yyyy-MM-dd")).parse(dateParam.getStart(),new ParsePosition(0)),
+                        (new SimpleDateFormat("yyyy-MM-dd")).parse(dateParam.getEnd(),new ParsePosition(0)),
                         (int)userInfo.get("userId"))
         );
     }

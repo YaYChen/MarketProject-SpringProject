@@ -33,7 +33,7 @@ public class OrderService {
         return orderMapper.getOne(serial,usesrId);
     }
 
-    @Cacheable(value = "orderCache",key = "#id",unless = "#result == null")
+    @Cacheable(value = "orderCache",key = "#root.targetClass.concat(#id)",unless = "#result == null")
     public Order getOrderById(int id){
         return orderMapper.getOrderById(id);
     }
@@ -44,6 +44,8 @@ public class OrderService {
     }
 
     public List<Order> searchOrderByDate(Date startDate, Date endDate, int userId){
+        System.out.println(startDate.toString());
+        System.out.println(endDate.toString());
         return orderMapper.searchByDate(startDate, endDate, userId);
     }
 
@@ -58,7 +60,7 @@ public class OrderService {
         }
     }
 
-    @CachePut(value = "orderCache",key = "#result.id")
+    @CachePut(value = "orderCache",key = "#root.targetClass.concat(#order.id)")
     public Order updateOrder(Order order,int userId) throws Exception{
         Order oldOrder = orderMapper.getOne(order.getSerial(),userId);
         List<Long> idList = new ArrayList<Long>();

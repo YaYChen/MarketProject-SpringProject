@@ -20,25 +20,25 @@ public class SupplierService {
     @Autowired
     public SupplierService(SupplierMapper supplierMapper){this.supplierMapper = supplierMapper;}
 
-    @Cacheable(value = "supplierCache",key = "#root.methodName",unless = "#result == null")
+    @Cacheable(value = "supplierCache",key = "#userId",unless = "#result == null")
     public List<Supplier> getAllSupplier(int userId){
         return supplierMapper.selectAll(userId);
     }
 
-    @Cacheable(value = "supplierCache",key = "#id",unless = "#result == null")
+    @Cacheable(value = "supplierCache",key = "#root.targetClass.concat(#id)",unless = "#result == null")
     public Supplier getSupplierByID(int id,int userId){
         return supplierMapper.getSupplierByID(id,userId);
     }
 
-    @CachePut(value = "supplierCache",key = "#result.id")
+    @CachePut(value = "supplierCache",key = "#root.targetClass.concat(#supplier.id)")
     public Supplier updateSupplier(Supplier supplier) throws Exception{
         this.supplierMapper.update(supplier);
         return supplier;
     }
 
-    public Supplier insertSupplier(Supplier supplier) throws Exception{
-        int id = this.supplierMapper.insert(supplier);
-        return this.getSupplierByID(id,supplier.getCreateUser().getId());
+    @CacheEvict(value = "supplierCache",key = "#userId")
+    public void insertSupplier(Supplier supplier) throws Exception{
+        this.supplierMapper.insert(supplier);
     }
 
     @CacheEvict(value = "supplierCache",key = "#id")

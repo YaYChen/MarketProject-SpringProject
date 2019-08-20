@@ -32,18 +32,14 @@ public class SupplierController {
     @GetMapping(value = "/p/getAllSupplier")
     @ResponseBody
     public ResponseEntity<List<Supplier>> getAllSupplier(){
-        int userId = Integer.getInteger(
-                jwtHelper.validateTokenAndGetClaims(request)
-                        .get("userId").toString());
+        int userId =(int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
         return ResponseEntity.ok(supplierService.getAllSupplier(userId));
     }
 
     @GetMapping(value = "/p/getSupplierByID")
     @ResponseBody
     public ResponseEntity<Supplier> getSupplierByID(@RequestParam("id") int id){
-        int userId = Integer.getInteger(
-                jwtHelper.validateTokenAndGetClaims(request)
-                        .get("userId").toString());
+        int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
         return ResponseEntity.ok(supplierService.getSupplierByID(id,userId));
     }
 
@@ -66,6 +62,8 @@ public class SupplierController {
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Supplier supplier){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
+            int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
+            supplier.getCreateUser().setId(userId);
             supplierService.insertSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

@@ -6,22 +6,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class User implements Serializable {
-    @NotNull
+
     private int id;
-    @NotNull
-    @Size(min=8,max=16)
     private String loginName;
-    @NotNull
-    @Size(min=8,max=16)
     private String password;
-    @Size(min=2,max=16)
     private String userName;
-    @Size(min=11,max=11)
     private String userMobile;
     private Date genTime;
     private Date lastLoginTime;
     private int count;
-
 
     public int getId() {
         return id;
