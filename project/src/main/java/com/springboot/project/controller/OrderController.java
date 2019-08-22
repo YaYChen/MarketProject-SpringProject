@@ -4,6 +4,7 @@ import com.springboot.project.Utils.DateParam;
 import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Order;
 import com.springboot.project.service.OrderService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,15 +100,17 @@ public class OrderController {
         }
     }
 
-    @PostMapping(value = "/p/delete-order")
+    @DeleteMapping(value = "/p/delete-order")
     @ResponseBody
-    public ResponseEntity<Map<String,String>> deleteOrder(@RequestBody String serial){
+    public ResponseEntity<Map<String,String>> deleteOrder(
+            @RequestParam(value = "serial") String serial,
+            @RequestParam(value = "id") int id){
         Map<String,String> map = new HashMap<String,String>();
         try{
             int userId =
                     (int)jwtHelper.validateTokenAndGetClaims(request)
                             .get("userId");
-            orderService.deleteOrder(serial,userId);
+            orderService.deleteOrder(serial,userId,id);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,String>>(map, HttpStatus.OK);
         }catch (Exception e){

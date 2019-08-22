@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,27 +33,41 @@ public class ProductService {
         return productMapper.getProductByID(id);
     }
 
-    @Cacheable(value = "productCache",key = "#root.method.name.concat(#code)",unless = "#result == null")
+    @Cacheable(value = "productCache-code",key = "#code+'_'+#userId",unless = "#result == null")
     public Product getProductByCode(String code,int userId){
         return productMapper.getProductByCode(code,userId);
     }
 
-    @Cacheable(value = "productCache",key = "#root.method.name.concat(#categoryID)",unless = "#result == null")
+    @Cacheable(value = "productCache-category",key = "#categoryID+'_'+#userId",unless = "#result == null")
     public List<Product> getProductByCategory(int categoryID,int userId){
         return productMapper.getProductsByCategory(categoryID, userId);
     }
 
-    @CachePut(value = "productCache",key = "#result.id")
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "productCache-category", allEntries=true)
+            },
+            put = {
+                    @CachePut(value = "productCache",key = "#product.getId()"),
+                    @CachePut(value = "productCache-code",key = "#product.getCode()+'_'+#product.getCreateUser().getId()")
+            }
+    )
     public Product updateProduct(Product product) throws Exception{
         productMapper.update(product);
         return product;
     }
 
+    @CacheEvict(value = "productCache-category", allEntries=true)
     public void insertProduct(Product product) throws Exception{
         productMapper.insert(product);
     }
 
-    @CacheEvict(value = "productCache",key = "#id")
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "productCache-category", allEntries=true),
+                    @CacheEvict(value = "productCache-code", allEntries=true),
+                    @CacheEvict(value = "productCache",key = "#id")
+            })
     public void deleteProduct(int id) throws Exception{
         productMapper.delete(id);
     }

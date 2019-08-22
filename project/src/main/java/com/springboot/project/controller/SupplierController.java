@@ -2,6 +2,7 @@ package com.springboot.project.controller;
 
 import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Supplier;
+import com.springboot.project.entity.User;
 import com.springboot.project.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,10 @@ public class SupplierController {
     public ResponseEntity<Map<String,Object>> update(@RequestBody Supplier supplier){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
+            int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
+            User user = new User();
+            user.setId(userId);
+            supplier.setCreateUser(user);
             supplierService.updateSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -63,7 +68,9 @@ public class SupplierController {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
-            supplier.getCreateUser().setId(userId);
+            User user = new User();
+            user.setId(userId);
+            supplier.setCreateUser(user);
             supplierService.insertSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

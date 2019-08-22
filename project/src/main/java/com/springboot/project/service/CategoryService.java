@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,23 +28,37 @@ public class CategoryService {
         return categoryMapper.getCategoryById(id);
     }
 
-    @Cacheable(value = "categoryCache",key = "#root.methodName.concat(#userId)",unless = "#result == null")
+    @Cacheable(value = "categoryCache-all",key = "#userId",unless = "#result == null")
     public List<Category> getAllCategories(int userId){
         return categoryMapper.getAll(userId);
     }
 
-    @CachePut(value = "categoryCache",key = "#result.id")
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "categoryCache-all", key = "#result.getUser().getId()"),
+            },
+            put = {
+                    @CachePut(value = "categoryCache",key = "#result.getId()")
+            }
+    )
     public Category updateCategory(Category category) throws Exception{
         categoryMapper.update(category);
         return category;
     }
 
+    @CacheEvict(value = "categoryCache-all", key = "#category.getUser().getId()")
     public Category insertCategory(Category category) throws Exception{
         return this.getCategoryById(categoryMapper.insert(category));
     }
 
-    @CacheEvict(value = "categoryCache",key = "#id")
-    public void deleteCategory(int id) throws Exception{
+
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "categoryCache",key = "#id"),
+                    @CacheEvict(value = "categoryCache-all", key = "#userId"),
+            }
+    )
+    public void deleteCategory(int id, int userId) throws Exception{
         categoryMapper.delete(id);
     }
 }

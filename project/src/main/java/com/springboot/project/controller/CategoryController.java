@@ -2,6 +2,7 @@ package com.springboot.project.controller;
 
 import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.Category;
+import com.springboot.project.entity.User;
 import com.springboot.project.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,8 @@ public class CategoryController {
     @GetMapping(value = "/p/getCategories")
     @ResponseBody
     public ResponseEntity<List<Category>> getCategories(){
-        Map<String, Object> claim = jwtHelper.validateTokenAndGetClaims(request);
-        return ResponseEntity.ok(categoryService.getAllCategories((int)claim.get("userId")));
+        int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
+        return ResponseEntity.ok(categoryService.getAllCategories(userId));
     }
 
     @PostMapping(value = "/p/update-category")
@@ -56,6 +57,10 @@ public class CategoryController {
     public ResponseEntity<Map<String,Object>> insert(@RequestBody Category category){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
+            int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
+            User user = new User();
+            user.setId(userId);
+            category.setUserId(user);
             categoryService.insertCategory(category);
             map.put("message", "");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -70,7 +75,8 @@ public class CategoryController {
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            categoryService.deleteCategory(id);
+            int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
+            categoryService.deleteCategory(id,userId);
             map.put("message", "");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
