@@ -29,7 +29,7 @@ public interface OrderItemMapper {
     @Update("update order_detail_table set " +
             "order_id=#{orderID}," +
             "product_id=#{product.id}," +
-            "number=#{quantity}" +
+            "number=#{quantity}," +
             "total_Price=#{totalPrice}" +
             " where id =#{id}")
     void update(OrderItem orderItem);

@@ -75,7 +75,7 @@ public interface ProductMapper {
                     "purchasePrice=#{purchasePrice}," +
                     "price=#{price}," +
                     "category_id=#{category.id}," +
-                    "user_id=#{createUser.id}," +
+                    "user_id=#{createUser.id}" +
                     " where id =#{id}")
     void update(Product product);
 

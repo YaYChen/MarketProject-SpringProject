@@ -3,6 +3,7 @@ package com.springboot.project.mapper;
 import com.springboot.project.entity.User;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 public interface UserMapper {
@@ -48,14 +49,13 @@ public interface UserMapper {
 
     @Insert("insert into user_table(login_name,password,user_name,user_mobile,gen_time,last_login_time,count) " +
             " values(#{loginName}," +
-            " values(#{password}," +
-            " values(#{userName}," +
-            " values(#{userMobile}," +
-            " values(#{genTime}," +
-            " values(#{lastLoginTime}," +
+            " #{password}," +
+            " #{userName}," +
+            " #{userMobile}," +
+            " #{genTime}," +
+            " #{lastLoginTime}," +
             " #{count})" )
-    @SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
-    int insert(User user);
+    void insert(User user);
 
     @Update("update user_table set " +
             "login_name=#{userName}," +
@@ -64,10 +64,16 @@ public interface UserMapper {
             "user_mobile=#{userMobile}," +
             "gen_time=#{genTime}," +
             "last_login_time=#{lastLoginTime}," +
-            "count=#{count}," +
+            "count=#{count}" +
             " where id =#{id}")
     void update(User user);
 
     @Delete("delete from user_table where id =#{id}")
     void delete(int id);
+
+    @Update("update user_table set " +
+            "last_login_time=#{loginDate}," +
+            "count=#{count}" +
+            " where id =#{userId}")
+    void updateHistoryInfo(int userId, int count, Date loginDate);
 }

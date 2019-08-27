@@ -5,6 +5,7 @@ import com.springboot.project.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,7 +30,13 @@ public class UserService {
         return userMapper.getUserByLoginName(loginName);
     }
 
-    public  User registeUser(User newUser){
-        return this.userMapper.getUserByID(this.userMapper.insert(newUser));
+    public void registeUser(User newUser){
+        newUser.setGenTime(new Date());
+        newUser.setCount(0);
+        this.userMapper.insert(newUser);
+    }
+
+    public void updateUserLoginHistory(int userId, int count){
+        this.userMapper.updateHistoryInfo(userId,count,new Date());
     }
 }

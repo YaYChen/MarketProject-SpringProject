@@ -33,7 +33,7 @@ public interface CategoryMapper {
 
     @Update("update category_table set " +
             "name=#{name}," +
-            "user_id=#{createUser.id}," +
+            "user_id=#{createUser.id}" +
             " WHERE id =#{id}")
     void update(Category category);
 
