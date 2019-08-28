@@ -13,8 +13,6 @@ public class User implements Serializable {
     private String userName;
     private String userMobile;
     private Date genTime;
-    private Date lastLoginTime;
-    private int count;
 
     public int getId() {
         return id;
@@ -62,21 +60,5 @@ public class User implements Serializable {
 
     public void setGenTime(Date genTime) {
         this.genTime = genTime;
-    }
-
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 }

@@ -5,6 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 /**
  * Hello world!
  *
@@ -13,6 +16,10 @@ import org.springframework.cache.annotation.EnableCaching;
 @MapperScan("com.springboot.project.mapper")
 public class App 
 {
+    @PostConstruct
+    void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
     public static void main( String[] args )
     {
     	SpringApplication.run(App.class, args);

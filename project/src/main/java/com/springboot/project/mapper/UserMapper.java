@@ -15,9 +15,7 @@ public interface UserMapper {
             @Result(property = "password", column = "password"),
             @Result(property = "userName", column = "user_name"),
             @Result(property = "userMobile", column = "user_mobile"),
-            @Result(property = "genTime", column = "gen_time"),
-            @Result(property = "lastLoginTime", column = "last_login_time"),
-            @Result(property = "count", column = "count")
+            @Result(property = "genTime", column = "gen_time")
     })
     List<User> selectAll();
 
@@ -25,12 +23,9 @@ public interface UserMapper {
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "loginName",  column = "login_name"),
-            @Result(property = "password", column = "password"),
             @Result(property = "userName", column = "user_name"),
             @Result(property = "userMobile", column = "user_mobile"),
-            @Result(property = "genTime", column = "gen_time"),
-            @Result(property = "lastLoginTime", column = "last_login_time"),
-            @Result(property = "count", column = "count")
+            @Result(property = "genTime", column = "gen_time")
     })
     User getUserByID(int user_id);
 
@@ -41,20 +36,16 @@ public interface UserMapper {
             @Result(property = "password", column = "password"),
             @Result(property = "userName", column = "user_name"),
             @Result(property = "userMobile", column = "user_mobile"),
-            @Result(property = "genTime", column = "gen_time"),
-            @Result(property = "lastLoginTime", column = "last_login_time"),
-            @Result(property = "count", column = "count")
+            @Result(property = "genTime", column = "gen_time")
     })
     User getUserByLoginName(String loginName);
 
-    @Insert("insert into user_table(login_name,password,user_name,user_mobile,gen_time,last_login_time,count) " +
+    @Insert("insert into user_table(login_name,password,user_name,user_mobile,gen_time) " +
             " values(#{loginName}," +
             " #{password}," +
             " #{userName}," +
             " #{userMobile}," +
-            " #{genTime}," +
-            " #{lastLoginTime}," +
-            " #{count})" )
+            " #{genTime})" )
     void insert(User user);
 
     @Update("update user_table set " +
@@ -62,18 +53,11 @@ public interface UserMapper {
             "password=#{password}," +
             "user_name=#{userName}," +
             "user_mobile=#{userMobile}," +
-            "gen_time=#{genTime}," +
-            "last_login_time=#{lastLoginTime}," +
-            "count=#{count}" +
+            "gen_time=#{genTime}" +
             " where id =#{id}")
     void update(User user);
 
     @Delete("delete from user_table where id =#{id}")
     void delete(int id);
 
-    @Update("update user_table set " +
-            "last_login_time=#{loginDate}," +
-            "count=#{count}" +
-            " where id =#{userId}")
-    void updateHistoryInfo(int userId, int count, Date loginDate);
 }

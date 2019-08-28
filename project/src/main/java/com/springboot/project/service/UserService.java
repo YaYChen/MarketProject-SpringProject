@@ -2,6 +2,7 @@ package com.springboot.project.service;
 
 import com.springboot.project.entity.User;
 import com.springboot.project.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ public class UserService {
 
     private UserMapper userMapper;
 
+    @Autowired
     public UserService(UserMapper userMapper){
         this.userMapper = userMapper;
     }
@@ -30,13 +32,8 @@ public class UserService {
         return userMapper.getUserByLoginName(loginName);
     }
 
-    public void registeUser(User newUser){
-        newUser.setGenTime(new Date());
-        newUser.setCount(0);
+    public void registerUser(User newUser){
         this.userMapper.insert(newUser);
     }
 
-    public void updateUserLoginHistory(int userId, int count){
-        this.userMapper.updateHistoryInfo(userId,count,new Date());
-    }
 }
