@@ -44,7 +44,7 @@ public class CategoryController {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             categoryService.updateCategory(category);
-            map.put("message", "");
+            map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
             map.put("message", e.getMessage());
@@ -62,7 +62,7 @@ public class CategoryController {
             user.setId(userId);
             category.setUserId(user);
             categoryService.insertCategory(category);
-            map.put("message", "");
+            map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
             map.put("message", e.getMessage());
@@ -77,7 +77,7 @@ public class CategoryController {
         try{
             int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
             categoryService.deleteCategory(id,userId);
-            map.put("message", "");
+            map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
             map.put("message", e.getMessage());

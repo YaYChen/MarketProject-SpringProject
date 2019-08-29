@@ -47,8 +47,8 @@ public class CategoryService {
     }
 
     @CacheEvict(value = "categoryCache-all", key = "#category.getUser().getId()")
-    public Category insertCategory(Category category) throws Exception{
-        return this.getCategoryById(categoryMapper.insert(category));
+    public void insertCategory(Category category) throws Exception{
+        this.categoryMapper.insert(category);
     }
 
 

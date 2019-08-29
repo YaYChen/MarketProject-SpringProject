@@ -16,10 +16,6 @@ import java.util.TimeZone;
 @MapperScan("com.springboot.project.mapper")
 public class App 
 {
-    @PostConstruct
-    void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }
     public static void main( String[] args )
     {
     	SpringApplication.run(App.class, args);
