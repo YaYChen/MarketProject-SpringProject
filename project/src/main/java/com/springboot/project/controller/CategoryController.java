@@ -70,7 +70,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping(value = "/p/delete-category")
+    @GetMapping(value = "/p/delete-category")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();

@@ -83,7 +83,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping(value = "/p/delete-product")
+    @GetMapping(value = "/p/delete-product")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -100,6 +100,9 @@ public class ProductController {
     @GetMapping(value = "/p/getWholeSalesVolume")
     @ResponseBody
     public ResponseEntity<List<SalesVolume>> getWholeSalesVolume(){
-        return ResponseEntity.ok(productService.getWholeSalesVolume());
+        int userId =
+                (int)jwtHelper.validateTokenAndGetClaims(request)
+                        .get("userId");
+        return ResponseEntity.ok(productService.getWholeSalesVolume(userId));
     }
 }
