@@ -2,7 +2,7 @@ package com.springboot.project.controller;
 
 import com.springboot.project.authenticate.JwtHelper;
 import com.springboot.project.entity.User;
-import com.springboot.project.service.LoginHistoryService;
+import com.springboot.project.service.UserInfoService;
 import com.springboot.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +16,12 @@ import java.util.*;
 public class UserController {
 
     private UserService userService;
-    private LoginHistoryService historyService;
+    private UserInfoService historyService;
 
     private JwtHelper jwtHelper;
 
     @Autowired
-    public UserController(UserService userService, LoginHistoryService historyService, JwtHelper jwtHelper){
+    public UserController(UserService userService, UserInfoService historyService, JwtHelper jwtHelper){
         this.userService = userService;
         this.historyService = historyService;
         this.jwtHelper = jwtHelper;

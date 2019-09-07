@@ -2,7 +2,7 @@ package com.springboot.project.service;
 
 import com.springboot.project.entity.LoginHistory;
 import com.springboot.project.entity.User;
-import com.springboot.project.mapper.LoginHistoryMapper;
+import com.springboot.project.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,16 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Map;
 
 @Service
 @Transactional
-public class LoginHistoryService {
+public class UserInfoService {
 
-    private LoginHistoryMapper mapper;
+    private UserMapper mapper;
 
     @Autowired
-    public LoginHistoryService(LoginHistoryMapper mapper){
+    public UserInfoService(UserMapper mapper){
         this.mapper = mapper;
     }
 
@@ -32,10 +32,20 @@ public class LoginHistoryService {
     @CacheEvict(value = "login-history",key = "#userId")
     public void insertLoginHistory(int userId){
         LoginHistory history = new LoginHistory();
-        User user = new User();
-        user.setId(userId);
-        history.setLoginUser(user);
+        history.setUserId(userId);
         history.setLoginDate(new Date());
         this.mapper.insertLoginHistory(history);
     }
+
+    @Cacheable(value = "user-detail",key = "#userId")
+    public User getUserDetail(int userId){
+        return this.mapper.getUserDetail(userId);
+    }
+
+    @CacheEvict(value = "user-detail",key = "#userId")
+    public void updateUserDetail(int userId, User user){
+        user.setId(userId);
+        this.mapper.updateUserDetail(user);
+    }
+
 }

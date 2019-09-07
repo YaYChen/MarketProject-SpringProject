@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class LoginHistory implements Serializable {
     private int id;
-    private User loginUser;
+    private int userId;
     private Date loginDate;
 
     public int getId() {
@@ -16,12 +16,12 @@ public class LoginHistory implements Serializable {
         this.id = id;
     }
 
-    public User getLoginUser() {
-        return loginUser;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setLoginUser(User loginUser) {
-        this.loginUser = loginUser;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Date getLoginDate() {

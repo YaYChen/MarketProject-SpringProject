@@ -72,6 +72,7 @@ public class ProductService {
         productMapper.delete(id);
     }
 
+    @Cacheable(value = "productCache-SalesVolume",key = "#userId")
     public List<SalesVolume> getWholeSalesVolume(int userId){
         return salesVolumeMapper.getWholeSalesVolume(userId);
     }
