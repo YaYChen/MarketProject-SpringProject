@@ -3,9 +3,14 @@ package com.springboot.project.entity;
 public class WxPay {
     private int id;
     private int userId;
+
+    //appid
     private String appId;
+    //api key不是appSecret
     private String key;
-    private String mch_id;
+    //商户id
+    private String mchId;
+    //证书存储地址
     private String certFile;
 
     public int getId() {
@@ -40,12 +45,12 @@ public class WxPay {
         this.key = key;
     }
 
-    public String getMch_id() {
-        return mch_id;
+    public String getMchId() {
+        return mchId;
     }
 
-    public void setMch_id(String mch_id) {
-        this.mch_id = mch_id;
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
     }
 
     public String getCertFile() {

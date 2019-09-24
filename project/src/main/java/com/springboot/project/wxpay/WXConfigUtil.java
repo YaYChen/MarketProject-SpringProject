@@ -1,22 +1,36 @@
 package com.springboot.project.wxpay;
 
 import com.github.wxpay.sdk.WXPayConfig;
-import org.springframework.util.ClassUtils;
+import com.springboot.project.entity.WxPay;
+import com.springboot.project.service.WxPayService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+@Configuration
 public class WXConfigUtil implements WXPayConfig {
-    private byte[] certData;
-    public static final String APP_ID = "你的appid";
-    public static final String KEY = "你的api key不是appSecret";
-    public static final String MCH_ID = "你的商户id";
 
-    public WXConfigUtil() throws Exception {
-        String certPath = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"/weixin/apiclient_cert.p12";//从微信商户平台下载的安全证书存放的路径
-        File file = new File(certPath);
+    private byte[] certData;
+
+    private WxPayService service;
+    private WxPay wxPay;
+
+    @Autowired
+    public WXConfigUtil(WxPayService service) {
+        this.service = service;
+    }
+
+    public void initialWxConfig(int user_id) throws Exception{
+        this.wxPay = this.service.getWxPayByUserID(user_id);
+        this.loadCertFile(this.wxPay.getCertFile());
+    }
+
+    private void loadCertFile(String path) throws Exception {
+        File file = new File(path);
         InputStream certStream = new FileInputStream(file);
         this.certData = new byte[(int) file.length()];
         certStream.read(this.certData);
@@ -25,18 +39,18 @@ public class WXConfigUtil implements WXPayConfig {
 
     @Override
     public String getAppID() {
-        return APP_ID;
+        return this.wxPay.getAppId();
     }
 
     //parnerid，商户号
     @Override
     public String getMchID() {
-        return MCH_ID;
+        return this.wxPay.getMchId();
     }
 
     @Override
     public String getKey() {
-        return KEY;
+        return this.wxPay.getKey();
     }
 
     @Override

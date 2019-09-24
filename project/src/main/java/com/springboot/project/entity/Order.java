@@ -18,6 +18,7 @@ public class Order implements Serializable {
     private String status;
     @NotNull
     private String totalPrice;
+    private String tradeNo;
     @NotNull
     private String totalNumber;
     @NotNull
@@ -69,6 +70,14 @@ public class Order implements Serializable {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
     }
 
     public String getTotalNumber() {

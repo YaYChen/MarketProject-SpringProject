@@ -84,7 +84,8 @@ public interface OrderMapper {
             "user_id=#{createUser.id}," +
             "status=#{status}," +
             "total_price=#{totalPrice}," +
-            "total_number=#{totalNumber}" +
+            "total_number=#{totalNumber}," +
+            "trade_no=#{tradeNo}" +
             " where id =#{id}")
     void update(Order order);
 
