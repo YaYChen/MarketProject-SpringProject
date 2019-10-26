@@ -12,8 +12,7 @@ public interface CategoryMapper {
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "name",  column = "name"),
-            @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
+            @Result(property = "userId",column = "user_id")
     })
     List<Category> getAll(int userId);
 
@@ -21,18 +20,17 @@ public interface CategoryMapper {
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "name",  column = "name"),
-            @Result(property = "userId",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
+            @Result(property = "userId",column = "user_id")
     })
     Category getCategoryById(int id);
 
     @Insert("insert into category_table(name,user_id)" +
-            " values(#{name},#{createUser.id})")
+            " values(#{name},#{userId})")
     void insert(Category category);
 
     @Update("update category_table set " +
             "name=#{name}," +
-            "user_id=#{createUser.id}" +
+            "user_id=#{userId}" +
             " WHERE id =#{id}")
     void update(Category category);
 

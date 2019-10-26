@@ -35,7 +35,7 @@ public class CategoryService {
 
     @Caching(
             evict = {
-                    @CacheEvict(value = "categoryCache-all", key = "#result.getUser().getId()"),
+                    @CacheEvict(value = "categoryCache-all", key = "#result.getUserId()"),
             },
             put = {
                     @CachePut(value = "categoryCache",key = "#result.getId()")
@@ -46,7 +46,7 @@ public class CategoryService {
         return category;
     }
 
-    @CacheEvict(value = "categoryCache-all", key = "#category.getUser().getId()")
+    @CacheEvict(value = "categoryCache-all", key = "#category.getUserId()")
     public void insertCategory(Category category) throws Exception{
         this.categoryMapper.insert(category);
     }

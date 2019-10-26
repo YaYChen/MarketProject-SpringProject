@@ -58,9 +58,7 @@ public class CategoryController {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
-            User user = new User();
-            user.setId(userId);
-            category.setUserId(user);
+            category.setUserId(userId);
             categoryService.insertCategory(category);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

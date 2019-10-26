@@ -10,15 +10,7 @@ public class Category implements Serializable {
     @NotNull
     private String name;
     @NotNull
-    private User createUser;
-
-    public User getUser() {
-        return createUser;
-    }
-
-    public void setUserId(User createUser) {
-        this.createUser = createUser;
-    }
+    private int userId;
 
     public int getId() {
         return id;
@@ -36,4 +28,11 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }
