@@ -71,9 +71,7 @@ public class ProductController {
             int userId =
                     (int)jwtHelper.validateTokenAndGetClaims(request)
                             .get("userId");
-            User user =new User();
-            user.setId(userId);
-            product.setCreateUser(user);
+            product.setUserId(userId);
             productService.insertProduct(product);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

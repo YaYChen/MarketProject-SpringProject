@@ -22,7 +22,7 @@ public class Product implements Serializable {
     @NotNull
     private String price;
     @NotNull
-    private User createUser;
+    private int userId;
 
     public int getId() {
         return id;
@@ -88,12 +88,11 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public User getCreateUser() {
-        return createUser;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCreateUser(User createUser) {
-        this.createUser = createUser;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-
 }

@@ -19,8 +19,7 @@ public interface ProductMapper {
             @Result(property = "productPicture",column = "productPicture"),
             @Result(property = "purchasePrice",column = "purchasePrice"),
             @Result(property = "price",column = "price"),
-            @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER))
+            @Result(property = "userId",column = "user_id")
     })
     Product getProductByID(int product_id);
 
@@ -35,8 +34,7 @@ public interface ProductMapper {
             @Result(property = "productPicture",column = "productPicture"),
             @Result(property = "purchasePrice",column = "purchasePrice"),
             @Result(property = "price",column = "price"),
-            @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.DEFAULT))
+            @Result(property = "userId",column = "user_id")
     })
     Product getProductByCode(String code, int userId);
 
@@ -51,8 +49,7 @@ public interface ProductMapper {
             @Result(property = "productPicture",column = "productPicture"),
             @Result(property = "purchasePrice",column = "purchasePrice"),
             @Result(property = "price",column = "price"),
-            @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.DEFAULT))
+            @Result(property = "createUser",column = "user_id")
     })
     List<Product> getProductsByCategory(int category_id, int userId);
 
@@ -64,7 +61,7 @@ public interface ProductMapper {
             "#{productPicture}," +
             "#{purchasePrice}," +
             "#{price},"+
-            "#{createUser.id})"})
+            "#{userId})"})
     void insert(Product product);
 
     @Update("update product_table set " +
@@ -75,7 +72,7 @@ public interface ProductMapper {
                     "purchasePrice=#{purchasePrice}," +
                     "price=#{price}," +
                     "category_id=#{category.id}," +
-                    "user_id=#{createUser.id}" +
+                    "user_id=#{userId}" +
                     " where id =#{id}")
     void update(Product product);
 
