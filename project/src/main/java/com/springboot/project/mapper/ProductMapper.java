@@ -49,7 +49,7 @@ public interface ProductMapper {
             @Result(property = "productPicture",column = "productPicture"),
             @Result(property = "purchasePrice",column = "purchasePrice"),
             @Result(property = "price",column = "price"),
-            @Result(property = "createUser",column = "user_id")
+            @Result(property = "userId",column = "user_id")
     })
     List<Product> getProductsByCategory(int category_id, int userId);
 
