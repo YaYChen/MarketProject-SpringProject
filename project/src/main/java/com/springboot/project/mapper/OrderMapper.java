@@ -14,8 +14,7 @@ public interface OrderMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
             @Result(property = "createTime",column = "create_time"),
-            @Result(property = "createUser",column= "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
+            @Result(property = "userId",column= "user_id"),
             @Result(property = "status",column = "status"),
             @Result(property = "totalPrice",column = "total_price"),
             @Result(property = "totalNumber",column = "total_number"),
@@ -29,8 +28,7 @@ public interface OrderMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
             @Result(property = "createTime",column = "create_time"),
-            @Result(property = "createUser",column= "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
+            @Result(property = "userId",column= "user_id"),
             @Result(property = "status",column = "status"),
             @Result(property = "totalPrice",column = "total_price"),
             @Result(property = "totalNumber",column = "total_number"),
@@ -44,8 +42,7 @@ public interface OrderMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
             @Result(property = "createTime",column = "create_time"),
-            @Result(property = "createUser",column= "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
+            @Result(property = "userId",column= "user_id"),
             @Result(property = "status",column = "status"),
             @Result(property = "totalPrice",column = "total_price"),
             @Result(property = "totalNumber",column = "total_number"),
@@ -59,20 +56,19 @@ public interface OrderMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "serial",column = "serial"),
             @Result(property = "createTime",column = "create_time"),
-            @Result(property = "createUser",column= "user_id",
-                    one=@One(select = "com.springboot.project.mapper.UserMapper.getUserByID",fetchType = FetchType.EAGER)),
+            @Result(property = "userId",column= "user_id"),
             @Result(property = "status",column = "status"),
             @Result(property = "totalPrice",column = "total_price"),
             @Result(property = "totalNumber",column = "total_number"),
             @Result(property = "orderItems",column = "id",
                     many = @Many(select = "com.springboot.project.mapper.OrderItemMapper.getOrderItems",fetchType = FetchType.EAGER))
     })
-    List<Order> searchByDate(Date start,Date end,int userId);
+    List<Order> searchByDate(Date start, Date end, int userId);
 
     @Insert("insert into order_table(serial,create_time,user_id,status,total_price,total_number) " +
             " values(#{serial}," +
             "#{createTime}," +
-            "#{createUser.id}," +
+            "#{userId}," +
             "#{status}," +
             "#{totalPrice}," +
             "#{totalNumber})")
@@ -81,7 +77,7 @@ public interface OrderMapper {
     @Update("update order_table set " +
             "serial=#{serial}," +
             "create_time=#{createTime}," +
-            "user_id=#{createUser.id}," +
+            "user_id=#{userId}," +
             "status=#{status}," +
             "total_price=#{totalPrice}," +
             "total_number=#{totalNumber}," +

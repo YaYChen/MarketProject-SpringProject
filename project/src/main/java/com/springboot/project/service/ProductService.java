@@ -4,6 +4,7 @@ import com.springboot.project.entity.Product;
 import com.springboot.project.entity.SalesVolume;
 import com.springboot.project.mapper.ProductMapper;
 import com.springboot.project.mapper.SalesVolumeMapper;
+import com.springboot.project.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -12,68 +13,95 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ProductService {
 
+    @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
     private SalesVolumeMapper salesVolumeMapper;
 
     @Autowired
-    public ProductService(ProductMapper productMapper,SalesVolumeMapper salesVolumeMapper){
-        this.productMapper = productMapper;
-        this.salesVolumeMapper = salesVolumeMapper;
-    }
+    private RedisUtil redisUtil;
 
-    @Cacheable(value = "productCache",key = "#id")
-    public Product getProductById(int id){
-        return productMapper.getProductByID(id);
-    }
-
-    @Cacheable(value = "productCache-code",key = "#code+'_'+#userId",unless = "#result == null")
-    public Product getProductByCode(String code,int userId){
-        return productMapper.getProductByCode(code,userId);
-    }
-
-    @Cacheable(value = "productCache-category",key = "#categoryID+'_'+#userId",unless = "#result == null")
-    public List<Product> getProductByCategory(int categoryID,int userId){
-        return productMapper.getProductsByCategory(categoryID, userId);
-    }
-
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "productCache-category", allEntries=true)
-            },
-            put = {
-                    @CachePut(value = "productCache",key = "#product.getId()"),
-                    @CachePut(value = "productCache-code",key = "#product.getCode()+'_'+#product.getCreateUser().getId()")
-            }
-    )
-    public Product updateProduct(Product product) throws Exception{
-        productMapper.update(product);
+    public Product getProductById(int userId, int id){
+        Object cacheObject = this.redisUtil.hget("productCache" + userId, String.valueOf(id));
+        Product product;
+        if(cacheObject != null){
+            product = (Product) this.redisUtil.hget("productCache" + userId, String.valueOf(id));
+        }else{
+            product = this.productMapper.getProductByID(id);
+            this.redisUtil.hset("productCache" + userId, String.valueOf(id), product);
+        }
         return product;
     }
 
-    @CacheEvict(value = "productCache-category", allEntries=true)
-    public void insertProduct(Product product) throws Exception{
-        productMapper.insert(product);
+    public Product getProductByCode(String code,int userId){
+        Map<Object,Object> cacheMap = this.redisUtil.hmget("productCache" + userId);
+        Product product;
+        if(cacheMap == null || cacheMap.isEmpty()){
+            product = this.productMapper.getProductByCode(code,userId);
+            this.redisUtil.hset("productCache" + userId, String.valueOf(product.getId()), product);
+        }else{
+            List<Object> products = cacheMap.values().stream()
+                    .filter(i -> ((Product)i).getCode().equals(code))
+                    .collect(Collectors.toList());
+            if(products.size() > 0){
+                return (Product) products.get(0);
+            }else{
+                product = this.productMapper.getProductByCode(code,userId);
+                this.redisUtil.hset("productCache" + userId, String.valueOf(product.getId()), product);
+            }
+        }
+        return product;
     }
 
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "productCache-category", allEntries=true),
-                    @CacheEvict(value = "productCache-code", allEntries=true),
-                    @CacheEvict(value = "productCache",key = "#id")
-            })
-    public void deleteProduct(int id) throws Exception{
-        productMapper.delete(id);
+    public List<Product> getProductByCategory(int categoryID,int userId){
+        Object cacheObject = this.redisUtil
+                .hget("productCache" + userId, "productListByCategory" + categoryID);
+        List<Product> products = new ArrayList<>();
+        if(cacheObject != null){
+            products = (List<Product>) this.redisUtil
+                            .hget("productCache" + userId, "productListByCategory" + categoryID);
+        }else{
+            products = this.productMapper.getProductsByCategory(categoryID, userId);
+            this.redisUtil.hset("productCache" + userId, "productListByCategory" + categoryID, products);
+        }
+        return products;
     }
 
-    @Cacheable(value = "productCache-SalesVolume",key = "#userId")
+    public Product updateProduct(Product product) {
+        this.productMapper.update(product);
+        this.redisUtil.hset("productCache" + product.getUserId(), String.valueOf(product.getId()), product);
+        return product;
+    }
+
+    public void insertProduct(Product product) {
+        this.redisUtil.hset("productCache" + product.getUserId(), String.valueOf(product.getId()), product);
+        this.productMapper.insert(product);
+    }
+
+    public void deleteProduct(int userId, int id) {
+        this.redisUtil.hdel("productCache" + userId, String.valueOf(id));
+        this.productMapper.delete(id);
+    }
+
     public List<SalesVolume> getWholeSalesVolume(int userId){
-        return salesVolumeMapper.getWholeSalesVolume(userId);
+        Object cacheObject = this.redisUtil.hget("productCache" + userId, "SalesVolume");
+        List<SalesVolume> volumes;
+        if(cacheObject != null){
+            volumes = (List<SalesVolume>) this.redisUtil.hget("productCache" + userId, "SalesVolume");
+        }else{
+            volumes = this.salesVolumeMapper.getWholeSalesVolume(userId);
+            this.redisUtil.hset("productCache" + userId, "SalesVolume", volumes);
+        }
+        return volumes;
     }
 }

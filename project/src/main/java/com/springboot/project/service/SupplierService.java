@@ -2,11 +2,8 @@ package com.springboot.project.service;
 
 import com.springboot.project.entity.Supplier;
 import com.springboot.project.mapper.SupplierMapper;
+import com.springboot.project.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,39 +13,76 @@ import java.util.List;
 @Transactional
 public class SupplierService {
 
+    @Autowired
     private SupplierMapper supplierMapper;
 
     @Autowired
-    public SupplierService(SupplierMapper supplierMapper){this.supplierMapper = supplierMapper;}
+    private RedisUtil redisUtil;
 
-    @Cacheable(value = "supplierCache-all", key = "#userId", unless = "#result == null")
-    public List<Supplier> getAllSupplier(int userId){
-        return supplierMapper.selectAll(userId);
+    private List<Supplier> getAllSuppliersFromDB(int userId){
+        return this.supplierMapper.selectAll(userId);
     }
 
-    @Cacheable(value = "supplierCache",key = "#result.getId()",unless = "#result == null")
+    public List<Supplier> getAllSuppliers(int userId){
+        Object cacheObject = this.redisUtil.hget(
+                "supplierCache",
+                "allSuppliers" + userId);
+        List<Supplier> suppliers;
+        if(cacheObject == null){
+            suppliers = this.getAllSuppliersFromDB(userId);
+            this.redisUtil.hset(
+                    "supplierCache",
+                    "allSuppliers" + userId,
+                    suppliers);
+        }else{
+            suppliers = (List<Supplier>) cacheObject;
+        }
+        return suppliers;
+    }
+
     public Supplier getSupplierByID(int id,int userId){
-        return supplierMapper.getSupplierByID(id,userId);
+        for (Supplier item : this.getAllSuppliers(userId)) {
+            if(item.getId() == id){
+                return item;
+            }
+        }
+        return null;
     }
 
-    @CachePut(value = "supplierCache",key = "#supplier.getId()")
-    @CacheEvict(value = "supplierCache-all", allEntries=true)
-    public Supplier updateSupplier(Supplier supplier) throws Exception{
+    public void updateSupplier(Supplier supplier) {
         this.supplierMapper.update(supplier);
-        return supplier;
+        List<Supplier> suppliers = this.getAllSuppliers(supplier.getUserId());
+        for (Supplier item : suppliers) {
+            if(item.getId() == supplier.getId()){
+                suppliers.set(suppliers.indexOf(item),supplier);
+            }
+        }
+        this.redisUtil.hset(
+                "supplierCache",
+                "allSuppliers" + supplier.getUserId(),
+                suppliers);
     }
 
-    @CacheEvict(value = "supplierCache-all",key = "#supplier.getCreateUser().getId()")
-    public void insertSupplier(Supplier supplier) throws Exception{
+    public void insertSupplier(Supplier supplier) {
         this.supplierMapper.insert(supplier);
+        this.redisUtil.hset(
+                "supplierCache",
+                "allSuppliers" + supplier.getUserId(),
+                this.getAllSuppliersFromDB(supplier.getUserId()));
     }
 
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "supplierCache-all", allEntries=true),
-                    @CacheEvict(value = "supplierCache", key = "#id")
-            })
-    public void deleteSupplier(int id) throws Exception{
+    public void deleteSupplier(int userId, int id) {
         this.supplierMapper.delete(id);
+        List<Supplier> suppliers = this.getAllSuppliers(userId);
+        for (Supplier item : suppliers) {
+            if(item.getId() == id){
+                suppliers.remove(item);
+                break;
+            }
+        }
+        this.redisUtil.hset(
+                "supplierCache",
+                "allSuppliers" + userId,
+                suppliers);
     }
 }

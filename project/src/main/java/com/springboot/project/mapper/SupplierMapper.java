@@ -15,29 +15,27 @@ public interface SupplierMapper {
             @Result(property = "brand", column = "brand"),
             @Result(property = "phone",column = "phone"),
             @Result(property = "picture",column = "picture"),
-            @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.EAGER))
+            @Result(property = "userId",column = "user_id")
     })
     List<Supplier> selectAll(int userId);
 
-    @Select("select * from supplier_table where id = #{supplier_id} and user_id = #{userId}")
+    @Select("select * from supplier_table where id = #{id} and user_id = #{userId}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "name",  column = "name"),
             @Result(property = "brand", column = "brand"),
             @Result(property = "phone",column = "phone"),
             @Result(property = "picture",column = "picture"),
-            @Result(property = "createUser",column = "user_id",
-                    one=@One(select = "com.springboot.project.mapper.CategoryMapper.getCategoryById",fetchType = FetchType.EAGER))
+            @Result(property = "userId",column = "user_id")
     })
-    Supplier getSupplierByID(int supplier_id,int userId);
+    Supplier getSupplierByID(int id,int userId);
 
     @Insert("insert into supplier_table(name,brand,phone,picture,user_id) " +
             " values(#{name}," +
             "#{brand}," +
             "#{phone}," +
             "#{picture},"+
-            "#{createUser.id})")
+            "#{userId})")
     void insert(Supplier supplier);
 
     @Update("update supplier_table set " +
@@ -45,7 +43,7 @@ public interface SupplierMapper {
             "brand=#{brand}," +
             "phone=#{phone}," +
             "picture=#{picture}," +
-            "user_id=#{createUser.id}" +
+            "user_id=#{userId}" +
             " where id =#{id}")
     void update(Supplier supplier);
 

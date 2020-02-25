@@ -15,7 +15,7 @@ public class Supplier implements Serializable {
     @NotNull
     private String picture;
     @NotNull
-    private User createUser;
+    private int userId;
 
     public int getId() {
         return id;
@@ -57,11 +57,11 @@ public class Supplier implements Serializable {
         this.picture = picture;
     }
 
-    public User getCreateUser() {
-        return createUser;
+    public int getUserId() {
+        return this.userId;
     }
 
-    public void setCreateUser(User createUser) {
-        this.createUser = createUser;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

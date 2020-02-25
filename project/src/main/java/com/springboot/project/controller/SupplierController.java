@@ -30,11 +30,11 @@ public class SupplierController {
         this.jwtHelper = jwtHelper;
     }
 
-    @GetMapping(value = "/p/getAllSupplier")
+    @GetMapping(value = "/p/getAllSuppliers")
     @ResponseBody
     public ResponseEntity<List<Supplier>> getAllSupplier(){
         int userId =(int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
-        return ResponseEntity.ok(supplierService.getAllSupplier(userId));
+        return ResponseEntity.ok(supplierService.getAllSuppliers(userId));
     }
 
     @GetMapping(value = "/p/getSupplierByID")
@@ -50,9 +50,7 @@ public class SupplierController {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
-            User user = new User();
-            user.setId(userId);
-            supplier.setCreateUser(user);
+            supplier.setUserId(userId);
             supplierService.updateSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -68,9 +66,7 @@ public class SupplierController {
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
-            User user = new User();
-            user.setId(userId);
-            supplier.setCreateUser(user);
+            supplier.setUserId(userId);
             supplierService.insertSupplier(supplier);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
@@ -85,7 +81,8 @@ public class SupplierController {
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            supplierService.deleteSupplier(id);
+            int userId = (int)jwtHelper.validateTokenAndGetClaims(request).get("userId");
+            supplierService.deleteSupplier(userId, id);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){

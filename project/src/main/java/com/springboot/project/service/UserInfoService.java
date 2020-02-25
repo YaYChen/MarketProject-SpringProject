@@ -17,19 +17,14 @@ import java.util.Map;
 @Transactional
 public class UserInfoService {
 
+    @Autowired
     private UserMapper mapper;
 
-    @Autowired
-    public UserInfoService(UserMapper mapper){
-        this.mapper = mapper;
-    }
-
-    @Cacheable(value = "login-history",key = "#userId")
     public List<LoginHistory> getLoginHistoryList(int userId){
+
         return this.mapper.getAllLoginHistoryByUserId(userId);
     }
 
-    @CacheEvict(value = "login-history",key = "#userId")
     public void insertLoginHistory(int userId){
         LoginHistory history = new LoginHistory();
         history.setUserId(userId);
@@ -37,12 +32,10 @@ public class UserInfoService {
         this.mapper.insertLoginHistory(history);
     }
 
-    @Cacheable(value = "user-detail",key = "#userId")
     public User getUserDetail(int userId){
         return this.mapper.getUserDetail(userId);
     }
 
-    @CacheEvict(value = "user-detail",key = "#userId")
     public void updateUserDetail(int userId, User user){
         user.setId(userId);
         this.mapper.updateUserDetail(user);

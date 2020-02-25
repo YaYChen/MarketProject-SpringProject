@@ -13,11 +13,12 @@ public class Order implements Serializable {
     @NotNull
     private Date createTime;
     @NotNull
-    private User createUser;
+    private int userId;
     @NotNull
     private String status;
     @NotNull
     private String totalPrice;
+    @NotNull
     private String tradeNo;
     @NotNull
     private String totalNumber;
@@ -48,12 +49,12 @@ public class Order implements Serializable {
         this.createTime = createTime;
     }
 
-    public User getCreateUser() {
-        return createUser;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCreateUser(User createUser) {
-        this.createUser = createUser;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getStatus() {

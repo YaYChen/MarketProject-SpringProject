@@ -86,7 +86,10 @@ public class ProductController {
     public ResponseEntity<Map<String,Object>> delete(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String,Object>();
         try{
-            productService.deleteProduct(id);
+            int userId =
+                    (int)jwtHelper.validateTokenAndGetClaims(request)
+                            .get("userId");
+            productService.deleteProduct(userId, id);
             map.put("message", "Success!");
             return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
         }catch (Exception e){
