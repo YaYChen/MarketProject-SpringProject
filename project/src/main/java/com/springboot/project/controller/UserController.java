@@ -27,13 +27,13 @@ public class UserController {
         this.jwtHelper = jwtHelper;
     }
 
-    @GetMapping(value = "/getUsers")
+    @GetMapping(value = "/getallusers")
     @ResponseBody
     public ResponseEntity<List<User>> getUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/adduser")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> signUp(@RequestBody User newUser) {
         Map<String,Object> map = new HashMap<String,Object>();

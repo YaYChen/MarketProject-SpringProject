@@ -10,6 +10,7 @@ public class User implements Serializable {
     private String password;
     private String userName;
     private String userMobile;
+    private String shopLocation;
     private Date genTime;
 
     public int getId() {
@@ -50,6 +51,14 @@ public class User implements Serializable {
 
     public void setUserMobile(String userMobile) {
         this.userMobile = userMobile;
+    }
+
+    public String getShopLocation() {
+        return shopLocation;
+    }
+
+    public void setShopLocation(String shopLocation) {
+        this.shopLocation = shopLocation;
     }
 
     public Date getGenTime() {
